@@ -1,0 +1,1463 @@
+VERSION 5.00
+Object = "{BDDD132C-614B-11D3-B85E-85ADB7D07209}#1.0#0"; "dXSBar.dll"
+Object = "{1BE65FA0-CBF9-11D2-BBC7-00104B9E0792}#2.0#0"; "sstbars2.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Begin VB.MDIForm Menu 
+   BackColor       =   &H8000000C&
+   Caption         =   "Sistema de Logística"
+   ClientHeight    =   8175
+   ClientLeft      =   2130
+   ClientTop       =   1785
+   ClientWidth     =   11280
+   Icon            =   "menu.frx":0000
+   LinkTopic       =   "MDIForm1"
+   WindowState     =   2  'Maximized
+   Begin MSComctlLib.StatusBar Sb 
+      Align           =   2  'Align Bottom
+      Height          =   315
+      Left            =   0
+      TabIndex        =   1
+      Top             =   7860
+      Width           =   11280
+      _ExtentX        =   19897
+      _ExtentY        =   556
+      _Version        =   393216
+      BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
+         NumPanels       =   4
+         BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Text            =   "Usuario"
+            TextSave        =   "Usuario"
+         EndProperty
+         BeginProperty Panel2 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+         EndProperty
+         BeginProperty Panel3 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            Text            =   "PC"
+            TextSave        =   "PC"
+         EndProperty
+         BeginProperty Panel4 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+         EndProperty
+      EndProperty
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin VB.Timer TmrTitle 
+      Interval        =   100
+      Left            =   2160
+      Top             =   60
+   End
+   Begin ActiveToolBars.SSActiveToolBars SSActiveToolBars1 
+      Left            =   1620
+      Top             =   0
+      _ExtentX        =   741
+      _ExtentY        =   741
+      _Version        =   131082
+      ToolBarsCount   =   2
+      ToolsCount      =   102
+      PersonalizedMenus=   0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Arial"
+         Size            =   6.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Tools           =   "menu.frx":058A
+      ToolBars        =   "menu.frx":3F40E
+   End
+   Begin DXSIDEBARLibCtl.dxSideBar dxSideBar1 
+      Align           =   3  'Align Left
+      Height          =   7860
+      Left            =   0
+      OleObjectBlob   =   "menu.frx":3F79E
+      TabIndex        =   0
+      TabStop         =   0   'False
+      Top             =   0
+      Width           =   1575
+   End
+End
+Attribute VB_Name = "Menu"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+Dim Titulo As String, F As Integer, w As Integer, Acu As Integer, Espacios As String
+Dim q As Integer
+'Declaración de la API
+Private Declare Function GetUserName Lib "advapi32.dll" Alias "GetUserNameA" _
+(ByVal lpBuffer As String, nSize As Long) As Long
+
+
+
+
+Private Sub dxSideBar1_OnClickItemLink(ByVal pGroup As DXSIDEBARLibCtl.IdxGroup, ByVal pLink As DXSIDEBARLibCtl.IdxItemLink, ByVal GroupIndex As Integer, ByVal ItemLinkIndex As Integer)
+    
+    Select Case pGroup.Index
+        Case 0:
+            Select Case pLink.ObjectName
+                Case "dxItemLink11"
+                    If ModUtilitario.validarFormAbierto("lista_solicitudes") Then
+                        Unload lista_solicitudes
+                    End If
+                    
+                    With lista_solicitudes
+                        .Show
+                    End With
+                Case "dxItemLink12"
+'                    If ModUtilitario.validarFormAbierto("lista_oc") Then
+'                        Unload lista_oc
+'                    End If
+'
+'                    wtipo_orden = "1"
+'
+'                    With lista_oc
+'                        .Caption = lista_oc.Caption & " Locales"
+'
+'                        .Show
+'                    End With
+                    
+                    If VerificaAutorizaciones("OCN", wusuario) = "''" Then
+                        MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+        
+                        Exit Sub
+                    End If
+                    
+                    If ModUtilitario.validarFormAbierto("ordendecompra") Then
+                        MsgBox "Mantenimiento de Orden en progreso, verifique.", vbInformation + vbOKOnly, App.ProductName
+                        
+                        Exit Sub
+                    End If
+                    
+                    If ModUtilitario.validarFormAbierto("frmListaOrden") Then
+                        Unload frmListaOrden
+                    End If
+                    
+                    With frmListaOrden
+                        .Ayuda = False
+                        
+                        .Show
+                    End With
+                Case "dxItemLink23":
+'                   MsgBox "Esta opción no está habilitada en la versión gratuita", vbInformation, "Sistema de Logística"
+                    wtipo_orden = "0"
+                    lista_oc.Caption = lista_oc.Caption & " Internacionales"
+                    lista_oc.Show
+                '   lista_regcompras.Show 1
+                'Case 3: Unload Me
+                '
+'                Case 5: Importaciones.Show 1
+                Case "dxItemLink26": 'lista_importa.Show 1
+                Case "dxItemLink24": 'Lista_ImportaAprob.Show 1
+                Case "dxItemLink25": 'Lista_RegCompras.Show
+            End Select
+        Case 1:
+            Select Case ItemLinkIndex
+                Case 0:
+'                    wtipoguia = "I"
+'
+'                    With lista_vales
+'                        .TipoVale = "I"
+'
+'                        .Show 1
+'                    End With
+                    
+                    'lista_vales.Show 1
+                    
+                    If VerificaAutorizaciones("VALING", wusuario) = "''" Then
+                        MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                        
+                        Exit Sub
+                    End If
+                    
+                    If ModUtilitario.validarFormAbierto("lista_vales") Then
+                        Unload lista_vales
+                    End If
+                    
+                    wtipoguia = "I"
+                    
+                    With lista_vales
+                        .TipoVale = "I"
+                        
+                        .Show
+                    End With
+                Case 1:
+'                    wtipoguia = "S"
+'
+'                    With lista_vales
+'                        .TipoVale = "S"
+'
+'                        .Show 1
+'                    End With
+                    
+                    'lista_vales.Show 1
+                    
+                    If VerificaAutorizaciones("VALSAL", wusuario) = "''" Then
+                        MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                        
+                        Exit Sub
+                    End If
+                    
+                    If ModUtilitario.validarFormAbierto("lista_vales") Then
+                        Unload lista_vales
+                    End If
+                    
+                    wtipoguia = "S"
+                    
+                    With lista_vales
+                        .TipoVale = "S"
+                        
+                        .Show
+                    End With
+                Case 2:
+                    MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+                    
+                    Exit Sub
+                    
+                    Transferencias.Show 1
+                Case 3:
+                    MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+                    
+                    Exit Sub
+                    
+                    'MsgBox "Esta opción no está habilitada en la versión gratuita", vbInformation, "Sistema de Logística"
+                '    Conversion.Show 1
+                'Case 4:
+                '    ProcesaVale.Show 1
+                'Case 5:
+                    'frmformula.Show 1
+                '    ListaFormulas.Show 1
+                'Case 6: InventarioFisico.Show 1
+            End Select
+        Case 2:
+            Select Case ItemLinkIndex
+                Case 0
+                    MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+                    
+                    Exit Sub
+                    
+                    'cons_ordenes_compra.Show 1
+                Case 1
+                    MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+                    
+                    Exit Sub
+                    
+                    kardex.Show 1
+                Case 2
+                    MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+                    
+                    Exit Sub
+                    
+                    inventario_valorizado.Show 1
+                'Case 3: ocompra_pendientes.Show 1
+                'Case 4: Consulta_PreciosdeProductos.Show 1
+                'Case 5: inventario_valorizado.Show 1
+                'Case 6: RInventario.Show 1
+            End Select
+        Case 3:
+            Select Case ItemLinkIndex
+                Case 0
+                    If VerificaAutorizaciones("MANTPRODUCTO", wusuario) = "''" Then
+                        MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                        
+                        Exit Sub
+                    End If
+                    
+                    If ModUtilitario.validarFormAbierto("frmListaBien") Then
+                        Unload frmListaBien
+                    End If
+                    
+                    With frmListaBien
+                        '.Ayuda = False
+                        '.InsumoOP = False
+                        
+                        .Ayuda = False
+                        .InsumoOP = False
+                        .ParaVenta = False
+                        .TieneMovimientoAlmacen = False
+                        .CadenaCorte = vbNullString
+                        .FiltroAdicional = vbNullString
+                        .TipoBienMostrar = vbNullString
+                        
+                        
+                        .Show 1
+                    End With
+                    
+                    'lista_prod.Show 1
+                Case 1
+                    MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+                    
+                    Exit Sub
+                    
+                    'linea1.Show 1
+                Case 2
+                    If VerificaAutorizaciones("MANTPROVEEDOR", wusuario) = "''" Then
+                        MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                        
+                        Exit Sub
+                    End If
+                    
+                    If ModUtilitario.validarFormAbierto("Lista_Proveedores") Then
+                        Unload Lista_Proveedores
+                    End If
+                    
+                    With Lista_Proveedores
+                        .Show
+                    End With
+                    
+                    'Lista_Proveedores.Show
+                Case 3
+                    MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+                    
+                    Exit Sub
+                    
+                    Lista_marcas.Show 1
+                Case 4
+                    'lista_conceptos.Show 1
+                    
+                    If VerificaAutorizaciones("MANTORIGEN", wusuario) = "''" Then
+                        MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                        
+                        Exit Sub
+                    End If
+                    
+                    With frmListaOrigen
+                        .Ayuda = False
+                        
+                        .Show 1
+                    End With
+            End Select
+        Case 4:
+            Select Case ItemLinkIndex
+                Case 0: ' parametros.Show 1
+            End Select
+        Case 5:
+            Select Case ItemLinkIndex
+                Case 0
+                    'lista_prod.Show 1
+                    
+                    If VerificaAutorizaciones("MANTPRODUCTO", wusuario) = "''" Then
+                        MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                        
+                        Exit Sub
+                    End If
+                    
+                    If ModUtilitario.validarFormAbierto("frmListaBien") Then
+                        Unload frmListaBien
+                    End If
+                    
+                    With frmListaBien
+                        '.Ayuda = False
+                        '.InsumoOP = False
+                        
+                        .Ayuda = False
+                        .InsumoOP = False
+                        .ParaVenta = False
+                        .TieneMovimientoAlmacen = False
+                        .CadenaCorte = vbNullString
+                        .FiltroAdicional = vbNullString
+                        .TipoBienMostrar = vbNullString
+                        
+                        .Show 1
+                    End With
+                Case 1
+                    If VerificaAutorizaciones("MANTPROVEEDOR", wusuario) = "''" Then
+                        MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                        
+                        Exit Sub
+                    End If
+                    
+                    If ModUtilitario.validarFormAbierto("Lista_Proveedores") Then
+                        Unload Lista_Proveedores
+                    End If
+                    
+                    With Lista_Proveedores
+                        .Show
+                    End With
+                    
+                    'Lista_Proveedores.Show 1
+                'Case 2: FrmModPrecios.Show 1
+                'Case 3: lista_cosimp.Show 1
+            End Select
+    End Select
+    
+End Sub
+
+'Obtiene el usuario actual del sistema
+Function Get_User_Name() As String
+
+    'creamos variables
+    Dim lpBuff As String * 25
+    Dim ret As Long
+    Dim UserName As String
+    
+    'Obtenemos el nombre de la api.
+    ret = GetUserName(lpBuff, 25)
+    UserName = left(lpBuff, InStr(lpBuff, Chr(0)) - 1)
+    
+    ' Devolvemos el nombre de usuario
+    Get_User_Name = UserName
+    
+End Function
+    
+Private Sub MDIForm_Load()
+    Dim cnn_dbingre     As New ADODB.Connection
+    Dim rsingre         As New ADODB.Recordset
+    Dim arreglo_menu(1 To 23) As a_numero
+    Dim x As Integer
+    Dim oUser           As String
+         
+    'wrutatemp = "\\192.168.1.2\Sistema Control Plus\Bancowin\Tower_2019\Temporales\Bancowin\"
+    Select Case UCase(Get_User_Name)
+'        Case "ADMINISTRADOR"
+'            oUser = "cplus"
+        Case "KQUISPE"
+            oUser = "KATIA"
+        Case "KMENDOZA"
+            oUser = "KATTY"
+        Case "SORTIZ"
+            oUser = "Shiarasi"
+        Case Else
+            oUser = "Varios"
+    End Select
+    
+    ctipoadm_bd = "" '---- "M" -> mysql
+    'wingreso = True
+    If wingreso = False And wusuario = "" Then
+    
+'        If oUser = "Varios" Then
+'            cnn_dbingre.Open "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & "C:\BANCOWIN\DB_INGRE.MDB" & ";Persist Security Info=False"
+'        Else
+'            cnn_dbingre.Open "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & wrutatemp & oUser & "\DB_INGRE.MDB" & ";Persist Security Info=False"
+'        End If
+'
+'        rsingre.Open "SELECT * FROM TB_INGRESO", cnn_dbingre, adOpenDynamic, adLockOptimistic
+'
+'        If Not rsingre.EOF Then
+'            rsingre.MoveFirst
+'            wempresa = Trim(rsingre.Fields("EMPRESA") & "")
+'            wF1Dir = wempresa
+'            wusuario = Trim(rsingre.Fields("USUARIO") & "")
+'
+'            cconex_control = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & App.Path & "\RUTAS.MDB" & ";Persist Security Info=False"
+'            If cnn_control.State = 1 Then cnn_control.Close
+'            cnn_control.Open cconex_control
+'            rscontrol.Open "SELECT * FROM SRUTAS WHERE EMPRESA ='" & wempresa & "'", cnn_control, adOpenDynamic, adLockOptimistic
+'            If Not rscontrol.EOF Then
+'                wrutaconta = Trim(rscontrol.Fields("CONTABILIDAD") & "")
+'                wrutabancos = Trim(rscontrol.Fields("BANCOS") & "")
+'                wrutatemp = Trim(rscontrol.Fields("TEMPORALES") & "")
+'                wcontacnt = Trim(rscontrol.Fields("CONTACNT") & "")
+'                strODBC = Trim(rscontrol.Fields("TABLAS") & "") & ""
+'                strTabla = Trim(rscontrol.Fields("EMPANT") & "")
+'                strODBCtablas = Trim(rscontrol.Fields("TABLAS") & "") & ""
+'                strTABLAempant = Trim(rscontrol.Fields("EMPANT") & "")
+'                strODBCsiete = Trim(rscontrol.Fields("SIETE") & "")
+'                strODBCsgte = Trim(rscontrol.Fields("EMPSGTE") & "")
+'            End If
+'            rscontrol.Close
+'            cnn_control.Close
+'
+'        End If
+'        rsingre.Close
+'        cnn_dbingre.Close
+    End If
+    
+    StrConexDbBancos = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & wrutabancos & "\DB_bancos.MDB;Persist Security Info=False"
+    cconex_dbbancos = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & wrutabancos & "\DB_BANCOS.MDB" & ";Persist Security Info=False"
+    If cnn_dbbancos.State = 1 Then cnn_dbbancos.Close
+    cnn_dbbancos.Open cconex_dbbancos
+    
+    
+    cconex_dbtabla = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & wrutabancos & "\DB_tabla.MDB" & ";Persist Security Info=False"
+    If cnn_dbtabla.State = 1 Then cnn_dbtabla.Close
+    cnn_dbtabla.Open cconex_dbtabla
+    
+    'Conectando a DBTabla (Contawin)-----------------------------------------------------------
+    StrConexContawinTabla = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & wcontacnt & "\" & wF1Dir & "\db_tabla.mdb;Persist Security Info=False"
+    
+    cnn_ContawinTabla.ConnectionString = StrConexContawinTabla
+    
+    If cnn_ContawinTabla.State = 1 Then cnn_ContawinTabla.Close
+    
+    'cnn_ContawinTabla.Open
+    '------------------------------ ADD SK -----------------------------------------
+    
+    
+    '----------------------------------------------------
+    cconex_control = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & App.Path & "\CNT_BANC.MDB" & ";Persist Security Info=False"
+    If cnn_control.State = 1 Then cnn_control.Close
+    cnn_control.Open cconex_control
+    
+    If rscontrol.State = adStateOpen Then rscontrol.Close
+    rscontrol.Open "SELECT * FROM BF1CNT WHERE F1DIR ='" & wempresa & "'", cnn_control, adOpenDynamic, adLockOptimistic
+    If Not rscontrol.EOF Then
+        
+        'wf1renovacion = Trim(rscontrol.Fields("F1TIPO_RENOV_XPAGAR") & "")
+        'wf1agente = Trim(rscontrol.Fields("F1AGENTERET") & "")
+    End If
+    
+    rscontrol.Close
+    cnn_control.Close
+    '----------------------------------------------------
+    
+    If cnn_control.State = adStateOpen Then cnn_control.Close
+    cconex_control = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & App.Path & "\CONTROL.MDB" & ";Persist Security Info=False"
+    cnn_control.Open cconex_control
+    
+    '-----------------------------------------------------------
+    StrConexControlCompra = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & App.Path & "\ctrcom.mdb" & ";Persist Security Info=False"
+    
+    cnn_ControlCompra.Open StrConexControlCompra
+    
+    '-----------------------------------------------------------
+    StrConexControlBanco = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & App.Path & "\cnt_banc.mdb" & ";Persist Security Info=False"
+    
+    cnn_ControlBanco.Open StrConexControlBanco
+    
+    If rscontrol.State = adStateOpen Then rscontrol.Close
+    rscontrol.Open "SELECT * FROM SF1PARAIN WHERE F1CODEMP ='" & wempresa & "'", cnn_control
+    If Not rscontrol.EOF Then
+        wconc_compra = rscontrol.Fields("F1CONC_COMPRA") & ""
+        wconc_salxtransf = rscontrol.Fields("F1CONC_SALXTRANSF") & ""
+        wconc_salida = rscontrol.Fields("F1CONC_SALIDA") & ""
+        wconc_ing_obra = rscontrol.Fields("F1CONC_ING_OBRA") & ""
+        wtiposalida = Trim(rscontrol.Fields("F1TIPOSALIDA") & "")
+        wmoneda_productos = Trim(rscontrol.Fields("F1MONEDA_PRODUCTOS") & "")
+    End If
+    rscontrol.Close
+    
+    If rscontrol.State = adStateOpen Then rscontrol.Close
+    rscontrol.Open "SELECT * FROM SF1PARAM WHERE F1CODEMP ='" & wempresa & "'", cnn_control
+    If Not rscontrol.EOF Then
+        'cCodConcar = "" & rscontrol.Fields("F1codconcar")
+        wf1visualiza_precio_hlp = rscontrol.Fields("F1COLVALVTA") & ""
+        'wf1elim_item_dcto = rscontrol.Fields("f1elim_item_dcto") & ""
+        wdireccion = Trim("" & rscontrol.Fields("F1DIREMP"))
+        wDistrito = Trim("" & rscontrol.Fields("F1DISTRITO"))
+        wPais = "Perú"
+        wwigv = Val("" & rscontrol.Fields("f1igv"))
+        wFob = Val("" & rscontrol.Fields("f1fob"))
+        wDesaduana = Val("" & rscontrol.Fields("f1desaduanaje"))
+        wAdela = Val("" & rscontrol.Fields("f1adelanto"))
+        wtelefono = Trim("" & rscontrol.Fields("F1LOGEMP"))
+        wLocal = "" & rscontrol.Fields("F4LOCAL")
+        wObra = "" & rscontrol.Fields("F1CODOBR")
+        wfax = Trim("" & rscontrol.Fields("F1FAX"))
+        wnumord = Trim("" & rscontrol.Fields("F1NUMORD"))
+        'wf1mant_productos = "" & rscontrol.Fields("f1mant_productos") &JCG
+    End If
+    rscontrol.Close
+    
+    cconex_ctrcom = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & App.Path & "\CTRCOM.MDB" & ";Persist Security Info=False"
+    cnn_ctrcom.Open cconex_ctrcom
+    
+    'Crea_Campo cconex_ctrcom, "param_com", "F1MONTO2DOVB", "Double", False, 0
+    
+    If rsparam_com.State = adStateOpen Then rsparam_com.Close
+    rsparam_com.Open "SELECT * FROM PARAM_COM WHERE F1CODEMP ='" & wempresa & "'", cnn_ctrcom
+    If Not rsparam_com.EOF Then
+        wnomcia = Trim(rsparam_com.Fields("F1NOMEMP") & "")
+        wrucempresa = Trim(rsparam_com.Fields("F1RUCEMP") & "")
+        wemailsol = Trim(rsparam_com.Fields("F1EMAIL_SOLICITUD") & "")
+        wemailccsol = Trim(rsparam_com.Fields("F1EMAIL_CCSOL") & "")
+        wasuntosol = Trim(rsparam_com.Fields("F1ASUNTO_SOL") & "")
+        wtextosol = Trim(rsparam_com.Fields("F1TEXTO_SOL") & "")
+        wemailoc = Trim(rsparam_com.Fields("F1EMAIL_OC") & "")
+        wemailccoc = Trim(rsparam_com.Fields("F1EMAIL_CCOC") & "")
+        wasuntooc = Trim(rsparam_com.Fields("F1ASUNTO_OC") & "")
+        wtextooc = Trim(rsparam_com.Fields("F1TEXTO_OC") & "")
+        
+        mes = right(rsparam_com.Fields("f1proame") & "", 2)
+        'wocompra = Trim(rsparam_com.Fields("f1ocompra") & "")  '---- MODIFICAR POR wf1trasoc
+        'wf1tipdoc_asoc = rsparam_com.Fields("F1TIPDOC_ASOC") & ""
+        'wf1inggasto = rsparam_com.Fields("f1inggasto") & ""
+        'wbancos = Trim(rsparam_com.Fields("f1bancos") & "")
+        'wf1traslado = rsparam_com.Fields("f1traslado") & ""
+        'gctapag = "" & rsparam_com.Fields("F1CTAPAG")
+        'wf1formatov = rsparam_com.Fields("f1formatov") & ""
+        'wf1numera = rsparam_com.Fields("f1numera") & ""
+        'wf1viscod = rsparam_com.Fields("f1viscod") & ""
+        'wf1trasoc = rsparam_com.Fields("F1TRASOC") & ""
+        
+        wIgv = Val("" & rsparam_com.Fields("F1IGV"))
+        wwigv = Val("" & rsparam_com.Fields("F1IGV"))
+        wMonto2doVb = Val("" & rsparam_com.Fields("F1MONTO2DOVB"))
+        'gfonavi = Val("" & rsparam_com.Fields("F1FONAVI"))
+        gretenc = Val("" & rsparam_com.Fields("F1RETENC"))
+        'wingobra = Trim(rsparam_com.Fields("f1ingobra") & "")
+        worigen = Trim(rsparam_com.Fields("f1origen") & "")
+        wctaigv = Trim(rsparam_com.Fields("f1ctaigv") & "")
+        'wctaotros = Trim(rsparam_com.Fields("f1ctaotros") & "")
+        'wredsuma = Trim(rsparam_com.Fields("f1redsuma") & "")
+        'wredresta = Trim(rsparam_com.Fields("f1redresta") & "")
+        'wctaret = Trim(rsparam_com.Fields("f1ctaret") & "")
+        'wctafon = Trim(rsparam_com.Fields("f1ctafonavi") & "")
+        'wf1formato = rsparam_com.Fields("f1formatorc") & ""
+        wanno = left(rsparam_com.Fields("f1proame") & "", 4)
+        'wdcto = Trim(rsparam_com.Fields("f1dcto") & "")
+        'wf1cnting = rsparam_com.Fields("f1cnting") & ""
+        'wf1uupp = Trim(rsparam_com.Fields("F1UUPP") & "")
+        'wf1show_ccosto = Trim(rsparam_com.Fields("F1SHOW_CCOSTO") & "")
+        wf1direc1 = Trim(rsparam_com.Fields("F1DIREMP") & "")
+        wf1direc2 = Trim(rsparam_com.Fields("F1DIREMP2") & "")
+        wf1visualiza_dctos = Trim(rsparam_com.Fields("F1VISUALIZA_DCTOS") & "")
+        wMailNoReplyCia = rsparam_com!F1NOREPLYMAIL & ""
+        wPassNoReplyCia = rsparam_com!F1NOREPLYpass & ""
+        wMailReplyCia = rsparam_com!F1REPLYMAIL & ""
+        wPassReplyCia = rsparam_com!F1REPLYpass & ""
+        
+        'wf1visualiza_advalorem = Trim(rsparam_com.Fields("F1VISUALIZA_ADVALOREM") & "")
+        'wf1visualiza_import_venta = Trim(rsparam_com.Fields("F1IMPORT_VENTA") & "")
+        'wvisualiza_cod = Trim(rsparam_com.Fields("F1VISUALIZA_COD") & "")
+    End If
+    rsparam_com.Close
+    CargaValoresUsuario wusuario
+    ' jcg para ocultar menus
+''        arreglo_menu(1).valor = 1
+''        arreglo_menu(2).valor = 2
+''        arreglo_menu(3).valor = 3
+''        arreglo_menu(4).valor = 4
+''        arreglo_menu(5).valor = 5
+''        arreglo_menu(6).valor = 6
+''        arreglo_menu(7).valor = 7
+''        arreglo_menu(8).valor = 8
+''        arreglo_menu(9).valor = 9
+''        arreglo_menu(10).valor = 10
+''        arreglo_menu(11).valor = 11
+''        arreglo_menu(12).valor = 14
+''        arreglo_menu(13).valor = 15
+''        arreglo_menu(14).valor = 16
+''        arreglo_menu(15).valor = 18
+''        arreglo_menu(16).valor = 19
+''        arreglo_menu(17).valor = 39
+''        arreglo_menu(18).valor = 45
+''        arreglo_menu(19).valor = 53
+''        arreglo_menu(20).valor = 59
+''        arreglo_menu(21).valor = 61
+''        arreglo_menu(22).valor = 64
+''        arreglo_menu(23).valor = 69
+''
+''        SSActiveToolBars1.Tools.ITEM(1).Description = "Logística"
+''    For X = 1 To 69
+''        SSActiveToolBars1.Tools.ITEM(X).Visible = False
+''    Next
+''    For X = 1 To 23
+''        SSActiveToolBars1.Tools.ITEM(arreglo_menu(X).valor).Visible = True
+''    Next
+    
+    Me.Caption = Me.Caption & " :-:-:-:-: " & wnomcia & " :-: " & wanno & " :-:-:-:-: "
+    Titulo = Me.Caption
+    q = 1
+    Sb.Panels(2).Text = UCase(wusuario & " (" & ObtenerCampo("EF2USERS", "F2NOMUSER", "F2CODUSER", UCase(wusuario), "T", cnn_dbbancos) & ")")
+    Sb.Panels(4).Text = ComputerName
+    'Me.Caption = ""
+    
+    If sGetINI(App.Path & strNombreFicheroConfigSQLCliente, "ConfigServidorSQLCliente", "UsarServidorSQLCliente", "l") = "1" Then
+        abrirCnDBMilano
+    End If
+    
+    If sGetINI(App.Path & strNombreFicheroConfigSQLCliente, "ConfigServidorSQLCliente", "UsarReplicacionBdCPlus", "l") = "1" Then
+        abrirCnBdCPlus
+    End If
+    
+    If sGetINI(wrutatemp & strNombreFicheroConfigCPusuario, "ConfigCP", "MostrarAlertaStockMinimo", "l") = "1" Then
+        With frmUtilAlertaStockReponer
+            .Show 1
+        End With
+    End If
+End Sub
+
+Private Sub CargaValoresUsuario(pUsuario As String)
+    Dim AGroup As dxGroup
+    Dim ALink As dxItemLink
+    Dim cconex_usuarios     As String
+    Dim cnn_usuarios        As New ADODB.Connection
+    Dim StrMira     As String
+    
+    If Len(Trim(pUsuario)) > 0 Then
+        wusuario = pUsuario
+        
+        cconex_usuarios = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & wrutabancos & "\DB_BANCOS.MDB" & ";Persist Security Info=False"
+        
+        cnn_usuarios.Open cconex_usuarios
+        If rsusuarios.State = 1 Then rsusuarios.Close
+        rsusuarios.Open "SELECT * FROM ef2users WHERE ucase(f2coduser)=ucase('" & Trim(wusuario) & "')", cnn_usuarios, adOpenDynamic, adLockOptimistic
+        If Not rsusuarios.EOF Then
+            'cpassword = Trim(rsusuarios.Fields("F2PASUSER") & "")
+            'wnomuser = Trim(rsusuarios.Fields("F2NOMUSER") & "")
+            'wcorreouser = Trim(rsusuarios.Fields("f2CORREO"))
+            'wcargo = Trim(rsusuarios.Fields("f2CARGO"))
+            'wusermail = "" & Trim(rsusuarios.Fields("f2USEMAIL"))
+            'wpaswmail = "" & Trim(rsusuarios.Fields("f2PASWMAIL"))
+            wuseractprod = "" & rsusuarios.Fields("f2useractprod")
+            wuserempresa = "" & rsusuarios.Fields("f2userempresa")
+        
+        End If
+        rsusuarios.Close
+        Set rsusuarios = Nothing
+        cnn_usuarios.Close
+        Set cnn_usuarios = Nothing
+        'bloquea opciones
+        'requerimientos
+        StrMira = VerificaAutorizaciones("LRI", wusuario)
+        If (Trim(StrMira)) = "''" Then
+            'Set ALink = dxSideBar1.GetImageListByName("dxItemLink11")
+            Set ALink = dxSideBar1.Groups(0).Links.ItemLinkByName("dxItemLink11")
+            Set AGroup = dxSideBar1.Groups(0)
+            If Not ALink Is Nothing Then
+                AGroup.Links.Remove (AGroup.IndexOf(ALink))
+            End If
+        End If
+        'orden de compra
+        StrMira = VerificaAutorizaciones("OCN", wusuario)
+        If (Trim(StrMira)) = "''" Then
+            'Set ALink = dxSideBar1.GetImageListByName("dxItemLink11")
+            Set ALink = dxSideBar1.Groups(0).Links.ItemLinkByName("dxItemLink12")
+            Set AGroup = dxSideBar1.Groups(0)
+            If Not ALink Is Nothing Then
+                AGroup.Links.Remove (AGroup.IndexOf(ALink))
+            End If
+        End If
+        'orden de compra internacional
+        StrMira = VerificaAutorizaciones("OCI", wusuario)
+        If (Trim(StrMira)) = "''" Then
+            'Set ALink = dxSideBar1.GetImageListByName("dxItemLink11")
+            Set ALink = dxSideBar1.Groups(0).Links.ItemLinkByName("dxItemLink23")
+            Set AGroup = dxSideBar1.Groups(0)
+            If Not ALink Is Nothing Then
+                AGroup.Links.Remove (AGroup.IndexOf(ALink))
+            End If
+        End If
+        '
+        StrMira = VerificaAutorizaciones("PIM", wusuario) 'Opcion de Presupuesto de Importacion
+        If (Trim(StrMira)) = "''" Then
+            'Set ALink = dxSideBar1.GetImageListByName("dxItemLink11")
+            Set ALink = dxSideBar1.Groups(0).Links.ItemLinkByName("dxItemLink26")
+            Set AGroup = dxSideBar1.Groups(0)
+            If Not ALink Is Nothing Then
+                AGroup.Links.Remove (AGroup.IndexOf(ALink))
+            End If
+        End If
+        '
+        StrMira = VerificaAutorizaciones("PRE", wusuario) 'Opcion Importaciones
+        If (Trim(StrMira)) = "''" Then
+            'Set ALink = dxSideBar1.GetImageListByName("dxItemLink11")
+            Set ALink = dxSideBar1.Groups(0).Links.ItemLinkByName("dxItemLink24")
+            Set AGroup = dxSideBar1.Groups(0)
+            If Not ALink Is Nothing Then
+                AGroup.Links.Remove (AGroup.IndexOf(ALink))
+            End If
+        End If
+        '
+        StrMira = VerificaAutorizaciones("RCM", wusuario) 'Registro de Compras
+        If (Trim(StrMira)) = "''" Then
+            'Set ALink = dxSideBar1.GetImageListByName("dxItemLink11")
+            Set ALink = dxSideBar1.Groups(0).Links.ItemLinkByName("dxItemLink25")
+            Set AGroup = dxSideBar1.Groups(0)
+            If Not ALink Is Nothing Then
+                AGroup.Links.Remove (AGroup.IndexOf(ALink))
+            End If
+        End If
+    End If
+
+End Sub
+
+
+Private Sub MDIForm_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+
+    If MsgBox("¿ Desea salir del sistema ?", vbYesNo + vbInformation, "Sistema de Logistica") = vbYes Then
+        If cnBdStudioModa.State = 1 Then cnBdStudioModa.Close
+        
+        If sGetINI(App.Path & strNombreFicheroConfigSQLCliente, "ConfigServidorSQLCliente", "UsarReplicacionBdCPlus", "l") = "1" Then
+            If cnBdCPlus.State = 1 Then cnBdCPlus.Close
+        End If
+        
+        
+        Unload Me
+    Else
+        Cancel = True
+    End If
+
+End Sub
+
+Private Sub MDIForm_Resize()
+Sb.Panels(2).Width = (Screen.Width - (Sb.Panels(1).Width + Sb.Panels(3).Width)) / 2
+Sb.Panels(4).Width = (Screen.Width - (Sb.Panels(1).Width + Sb.Panels(3).Width)) / 2
+End Sub
+
+Private Sub MDIForm_Unload(Cancel As Integer)
+
+    cnn_control.Close
+    
+    cnn_ctrcom.Close
+    If cnn_dbbancos.State = 1 Then cnn_dbbancos.Close
+    End
+End Sub
+
+Private Sub SSActiveToolBars1_ToolClick(ByVal Tool As ActiveToolBars.SSTool)
+    Select Case Tool.ID
+        '----- LOGISTICA
+        Case "ID_SolicituddeMateriales":
+            If VerificaAutorizaciones("LRI", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("lista_solicitudes") Then
+                Unload lista_solicitudes
+            End If
+            
+            lista_solicitudes.Show
+        Case "ID_OrdendeCompra":
+            If VerificaAutorizaciones("OCN", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+
+                Exit Sub
+            End If
+'
+'            If ModUtilitario.validarFormAbierto("lista_oc") Then
+'                Unload lista_oc
+'            End If
+'
+'            wtipo_orden = "1"
+'            lista_oc.Show
+            If ModUtilitario.validarFormAbierto("ordendecompra") Then
+                MsgBox "Mantenimiento de Orden en progreso, verifique.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("frmListaOrden") Then
+                Unload frmListaOrden
+            End If
+            
+            With frmListaOrden
+                .Ayuda = False
+                
+                .Show
+            End With
+        Case "ID_RegistrodeCompras"
+'            If VerificaAutorizaciones("RCM", wusuario) = "''" Then
+'                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+'
+'                Exit Sub
+'            End If
+            
+            frmRptCompras.Show
+        Case "ID_Salir":
+            'End
+            Unload Me
+        Case "ID_Conceptos":
+            'lista_conceptos.Show 1
+            If VerificaAutorizaciones("MANTORIGEN", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            With frmListaOrigen
+                .Ayuda = False
+                
+                .Show 1
+            End With
+        '----- INVENTARIOS
+        Case "ID_ValedeIngreso"
+            If VerificaAutorizaciones("VALING", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("lista_vales") Then
+                Unload lista_vales
+            End If
+            
+            wtipoguia = "I"
+            
+            With lista_vales
+                .TipoVale = "I"
+                
+                .Show
+            End With
+            
+            'lista_vales.Show 1
+        Case "ID_ValedeSalida"
+            If VerificaAutorizaciones("VALSAL", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("lista_vales") Then
+                Unload lista_vales
+            End If
+            
+            wtipoguia = "S"
+            
+            With lista_vales
+                .TipoVale = "S"
+                
+                .Show
+            End With
+            
+            'lista_vales.Show 1
+        Case "ID_Transferencias"
+            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            Exit Sub
+            
+            Transferencias.Show 1
+        Case "ID_Conversion"
+            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            Exit Sub
+            
+            Conversion.Show 1
+        '----- CONSULTAS
+        Rem SK ADD:
+        Case "Stock"
+            'MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            'Exit Sub
+            
+''            If ModUtilitario.validarFormAbierto("frmUtilStock") Then
+''                Unload frmUtilStock
+''            End If
+''
+''            frmUtilStock.Show
+        Case "Stockv2"
+            'MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            'Exit Sub
+            
+            If ModUtilitario.validarFormAbierto("frmUtilStockV2") Then
+                Unload frmUtilStockV2
+            End If
+
+            frmUtilStockV2.Show
+        Case "ID_Cons_OrdenesdeCompra"
+'            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+'            Exit Sub
+            
+            cons_ordenes_compra.Show 1
+        Case "ID_Kardex"
+'            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+'
+'            Exit Sub
+            
+            With kardex
+                .Show
+            End With
+        Case "ID_OrdenesdeCompraPendientes"
+            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            Exit Sub
+            
+            'ocompra_pendientes.Show 1
+        Case "ID_SeguimientodePedidos"
+'            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+'
+'            Exit Sub
+'            cons_ordenes_compra.Show 1
+            'FrmReportePedidos.Show 1
+        Case "ID_HistorialPrecios"
+            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            Exit Sub
+            
+            'Historial_Precios.Show
+        Case "ID_Autorizaciones"
+            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            Exit Sub
+            
+            'FrmLisAutorizaciones.Show
+        Case "TipoExistencia"
+            If VerificaAutorizaciones("MANTTIPEXIST", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("frmListaTipoExistencia") Then
+                Unload frmListaTipoExistencia
+            End If
+            
+            With frmListaTipoExistencia
+                .Ayuda = False
+                
+                .Show 1
+            End With
+        Case "ID_Productos"
+            'lista_prod.Show 1
+            If VerificaAutorizaciones("MANTPRODUCTO", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("frmListaBien") Then
+                Unload frmListaBien
+            End If
+            
+            With frmListaBien
+                .Ayuda = False
+                .InsumoOP = False
+                .ParaVenta = False
+'                .TieneMovimientoAlmacen = False
+                .TieneMovimientoAlmacen = True
+                .CadenaCorte = vbNullString
+                .FiltroAdicional = vbNullString
+                .TipoBienMostrar = vbNullString
+                
+                .Show 1
+            End With
+        Case "ID_Color"
+            If VerificaAutorizaciones("MANTCOLOR", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("frmListaBienColor") Then
+                Unload frmListaBienColor
+            End If
+            
+            With frmListaBienColor
+                .Ayuda = False
+                
+                .Show 1
+            End With
+        Case "ID_Movimientodiario"
+            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            Exit Sub
+            
+            'MovDiario_xAlmacen.Show 1
+        Case "ID_InventarioValorizado"
+            If VerificaAutorizaciones("INVENTAVALOR", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+
+                Exit Sub
+            End If
+            
+            'MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            'Exit Sub
+            
+            'inventario_valorizado.Show 1
+            
+            If ModUtilitario.validarFormAbierto("frmUtilInventario") Then
+                MsgBox "Formulario abierto, verifique.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            frmUtilInventario.Show
+        Case "TomadeInventario"
+            If VerificaAutorizaciones("TOMAINVENTA", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("frmUtilTomaInventario") Then
+                MsgBox "Formulario abierto, verifique.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            frmUtilTomaInventario.Show
+            
+        Case "ID_ParàmetrosdelSistema"
+            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            Exit Sub
+            
+            'parametros.Show 1
+        Case "ID_Proveedores"
+            If VerificaAutorizaciones("MANTPROVEEDOR", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+'            If ModUtilitario.validarFormAbierto("Lista_Proveedores") Then
+'                Unload Lista_Proveedores
+'            End If
+'
+'            With Lista_Proveedores
+'                .Show
+'            End With
+            
+            If ModUtilitario.validarFormAbierto("frmListaProveedor") Then
+                Unload frmListaProveedor
+            End If
+            
+            With frmListaProveedor
+                .Ayuda = False
+                
+                .Show vbModal
+            End With
+        Case "ID_Lineas"
+            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            Exit Sub
+            
+            'linea1.Show 1
+        Case "ID_Clientes"
+            With frmListaCliente
+                '.Ayuda = False
+                
+                .Show vbModal
+            End With
+            
+'            frmListaCliente.Show 1
+        Case "ID_RecalcularCostoPromedio"
+            If VerificaAutorizaciones("RECALCULOCOSTO", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+
+                Exit Sub
+            End If
+            
+            'MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            'Exit Sub
+            
+            'RecalculoCP.Show 1
+            
+            With frmUtilRecalcularCostoPromedio
+                .Show 1
+            End With
+            
+        'Case "ID_PedidoSugerido": Pedido_Sugerido.Show 1
+        Case "ID_Almacenes"
+            If VerificaAutorizaciones("MANTALMACEN", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("lista_almacen") Then
+                Unload lista_almacen
+            End If
+            
+            With lista_almacen
+                .Show 1
+            End With
+        Case "ID_AyudaProductos":
+'            If ModUtilitario.validarFormAbierto("ayuda_productos") Then
+'                Unload ayuda_productos
+'            End If
+'
+'            With ayuda_productos
+'                .CodigoAuxiliar = vbNullString
+'                .CodigoRequerimiento = vbNullString
+'                .CodigoProducto = vbNullString
+'
+'                '.CadenaCorte = InputBox("Ingrese cadena de texto a buscar:", App.ProductName, vbNullString)
+'
+'                .Show
+'            End With
+        Case "ID_Consulta_xprov"
+            'cons_comprasxproveedor.Show 1
+            Rem SK ADD:
+            If ModUtilitario.validarFormAbierto("frmRptAtencionOCPorProv") Then
+                Unload frmRptAtencionOCPorProv
+            End If
+            
+            With frmRptAtencionOCPorProv
+                .Show
+            End With
+            
+        'Case "ID_OC_Internacional":
+           ' wtipo_orden = "0"
+           ' lista_oc.Show 1
+        'Case "ID_RegistrodeCompras": registro_compras.Show 1
+        'Case "ID_ComprobantedeRetenciòn": comprobante_retencion.Show 1
+        'Case "ID_ImportacionesReg": Importaciones.Show 1
+        'Case "ID_Transferencias": FrmTransferencias.Show 1
+        Case "ID_Cons_SolicituddeMateriales"
+            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            Exit Sub
+            
+            'cons_solicitudes.Show 1
+        'Case "ID_ListadePrecios": Consulta_PreciosdeProductos.Show 1
+        'Case "ID_ListaProveedores": ListaProveDetallada.Show 1
+        'Case "ID_ComparativoProd_Prove": ConsProd_Proveedores.Show 1
+        'Case "ID_SaldosActuales": SaldoActual.Show 1
+        'Case "ID_Aplicacion": aplica.Show 1
+        'Case "ID_FormadePago": forma_pago_contado.Show 1
+        'Case "ID_ResumenporCentrodeCosto": ResuCenCosto2.Show 1
+        'Case "ID_SaldosIniciales": FrmSaldoAlm.Show 1
+        'Case "ID_LibroMensual": cons_libro_compret.Show 1
+        'Case "ID_LibroMensualReg": FrmRepRegistro.Show 1
+        'Case "ID_NùmerodeComprobante": frmimpco.Show 1
+        'Case "ID_Proveedor/Gastos": FrmProveGasto.Show 1
+        'Case "ID_CuentasContables": c_cuenta.Show 1
+        'Case "ID_ResumendeProvisiones": frmprovi.Show 1
+        'Case "ID_General": frmrcege.Show 1
+        'Case "ID_Detallado": frmrepce.Show 1
+        'Case "ID_Honorarios": frmhonor.Show 1
+   '     Case "ID_ComprasporMes": frmcomxmes.Show 1
+   '     Case "ID_Importaciones": FrmRepImporta.Show 1
+        'Case "ID_Documentos": Lista_Documentos.Show 1
+        'Case "ID_Generar": frm_gen.Show 1
+        'Case "ID_Consultas_as": frm_cons.Show 1
+        'Case "ID_Transferir": frmtrans.Show 1
+        Case "ID_SinCuadrar": 'frmdesc.Show 1
+        'Case "ID_CierredelMes": frciemes.Show 1
+        'Case "ID_TiposdeCambio": frmcontc.Show 1
+        'Case "ID_SinCuadrar_Com": frmconbd.Show 1
+        'Case "ID_Generar_Ret": generar_ret.Show 1
+        'Case "ID_Transferir_Ret": transferir_ret.Show 1
+        'Case "ID_ActualizaciòndeProveedores/Productos": actualiza_prov_prod.Show 1
+        'Case "ID_RegistroControldeRetenciones": cons_reg_cnt_ret.Show 1
+        'Case "ID_InterfazComprobantesdeRetenciòn": compret_interface_pdt.Show 1
+        'Case "ID_ActualizaciondeProductos/Proveedores": actualiza_producto_prov.Show 1
+        'Case "ID_CuadroComparativodePrecios": ListaSolictudC.Show 1
+        'Case "ID_Regenerar_Saldos": FrmRegenerar.Show 1
+        'Case "ID_Usuarios": lista_vendedores.Show 1
+        'Case "ID_Ayuda": Form1.Show 1
+        Case "ID_Mes"
+            MsgBox "Opción no Disponible por el momento.", vbInformation + vbOKOnly, App.ProductName
+            
+            Exit Sub
+            
+            'Form_Mes.Show 1
+        Case "InicioSM"
+            'Opción usada para cargar toda la Información Inicial de Studio Moda el 24/10/2014
+            
+            If wusuario <> "ADMIN" Then
+                If Trim(InputBox("Ingrese contraseña para ejecutar Procesos Iniciales:", "Contraseña para Procesos Iniciales", vbNullString)) <> "98761234" Then
+                    MsgBox "Contraseña incorrecta.", vbInformation + vbOKOnly, App.ProductName
+                    
+                    Exit Sub
+                End If
+            End If
+            
+'            With frmUtilProcesoInicioSM
+'                .Show 1
+'            End With
+        Case "ID_ConfiguracionPorUsuario"
+            If ModUtilitario.validarFormAbierto("frmCPConfig") Then
+                Unload frmCPConfig
+            End If
+            
+            With frmCPConfig
+                .Show 1
+            End With
+        Case "ID_Familia"
+            If VerificaAutorizaciones("MANTFAMILIA", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("frmListaFamilia") Then
+                Unload frmListaFamilia
+            End If
+            
+            With frmListaFamilia
+                .Ayuda = False
+                
+                .Show 1
+            End With
+        Case "ID_SubFamilia"
+            If VerificaAutorizaciones("MANTSUBFAMILIA", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("frmListaSubFamilia") Then
+                Unload frmListaSubFamilia
+            End If
+            
+            With frmListaSubFamilia
+                .Ayuda = False
+                
+                .Show 1
+            End With
+        Case "ID_UM"
+            If VerificaAutorizaciones("MANTUM", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("frmListaUM") Then
+                Unload frmListaUM
+            End If
+            
+            With frmListaUM
+                .Ayuda = False
+                
+                .Show 1
+            End With
+        Case "ID_SeguimientoRequerimiento"
+            If VerificaAutorizaciones("SEGREQUERIMIENTO", wusuario) = "''" Then
+                MsgBox "Ud. no cuenta con Autorización para acceder a esta Opción.", vbInformation + vbOKOnly, App.ProductName
+
+                Exit Sub
+            End If
+            
+'            If ModUtilitario.validarFormAbierto("frmUtilResumenProduccion") Then
+'                Unload frmUtilResumenProduccion
+'            End If
+            
+            If ModUtilitario.sGetINI(wrutatemp & strNombreFicheroConfigCPusuario, "ConfigCP", "OrdenCompraAbierta", "l") = "1" Then
+                MsgBox "Formulario abierto desde otra Ventana Principal o Proceso de automatización de colocación de Ordenes ejecutandose, verifique.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("frmUtilResumenProduccion") Then
+                Unload frmUtilResumenProduccion
+            End If
+            
+            With frmUtilResumenProduccion
+'                .NroPedido = InputBox("Ingrese el Nro. de Pedido:", App.ProductName, vbNullString)  'vbNullString
+'                .CodigoProveedor = vbNullString
+'                .CodigoProducto = vbNullString
+'
+'                If .NroPedido = vbNullString Then
+'                    MsgBox "No se especifico el No. de Requerimiento a consultar.", vbInformation + vbOKOnly, App.ProductName
+'                Else
+'                    .Show 1
+'                End If
+                
+                .Show 1
+            End With
+        Case "ID_Alerta"
+            If ModUtilitario.validarFormAbierto("frmUtilAlertaStockReponer") Then
+                Unload frmUtilAlertaStockReponer
+            End If
+            
+            frmUtilAlertaStockReponer.Show
+        Case "RegularizacionStockCEA"
+'            With frmUtilRegularizacionStockCEA
+'                .Show 1
+'            End With
+        Case "Reposicion"
+'            If ModUtilitario.validarFormAbierto("frmUtilReposicionCompromiso") Then
+'                Unload frmUtilReposicionCompromiso
+'            End If
+            
+            If ModUtilitario.sGetINI(wrutatemp & strNombreFicheroConfigCPusuario, "ConfigCP", "OrdenCompraAbierta", "l") = "1" Then
+                MsgBox "Formulario abierto desde otra Ventana Principal o Proceso de automatización de colocación de Ordenes ejecutandose, verifique.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            With frmUtilReposicionCompromiso
+                .NroPedido = vbNullString
+                .CodigoProveedor = vbNullString
+                .CodigoProducto = vbNullString
+                
+                .Show 1
+            End With
+        Case "DescargaOP"
+            'With frmUtilDescargaOPSencilla
+            '    .Show 1
+            'End With
+            
+'            frmUtilTest.Show 1
+        Case "ResumenCompras"
+            If ModUtilitario.validarFormAbierto("frmRptResCompras") Then
+                MsgBox "Formulario abierto, verifique.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            With frmRptResCompras
+                .Show
+            End With
+        Case "ResumenCompraProveedor"
+            If ModUtilitario.validarFormAbierto("frmRptResComprasProveedores") Then
+                MsgBox "Formulario abierto, verifique.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            With frmRptResComprasProveedores
+                .Show
+            End With
+        Case "CompromisoReposicionPendiente"
+            If ModUtilitario.validarFormAbierto("frmRptResCompromisoAuto") Then
+                MsgBox "Formulario abierto, verifique.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            With frmRptResCompromisoAuto
+                .Show
+            End With
+        Case "AlertaStockMinimo"
+            If ModUtilitario.validarFormAbierto("frmUtilAlertaStockMinimo") Then
+                MsgBox "Formulario abierto, verifique.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            With frmUtilAlertaStockMinimo
+                .Show
+            End With
+        Case "ConsumoAnualProducto"
+            If ModUtilitario.validarFormAbierto("frmRptConsumoAnualProducto") Then
+                MsgBox "Formulario abierto, verifique.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            With frmRptConsumoAnualProducto
+                .Show
+            End With
+        Case "EstadodeOrdenProduccion"
+            If ModUtilitario.sGetINI(wrutatemp & strNombreFicheroConfigCPusuario, "ConfigCP", "EstadoOrdenProduccion", "l") = "1" Then
+                MsgBox "Formulario abierto desde otra Ventana Principal, verifique.", vbInformation + vbOKOnly, App.ProductName
+                
+                Exit Sub
+            End If
+            
+            If ModUtilitario.validarFormAbierto("frmRptEstadoOrdenProduccion") Then
+                Unload frmRptEstadoOrdenProduccion
+            End If
+            
+            With frmRptEstadoOrdenProduccion
+                .Show
+            End With
+        Case "CambiosOP"
+            If ModUtilitario.validarFormAbierto("frmRptCambioOrdenProduccion") Then
+                Unload frmRptCambioOrdenProduccion
+            End If
+            
+            With frmRptCambioOrdenProduccion
+                .Show
+            End With
+        Case "ID_OPAnulada"
+            If ModUtilitario.validarFormAbierto("frmRptOrdenProduccionAnulada") Then
+'                Unload frmRptOrdenProduccionAnulada
+            End If
+            
+'            With frmRptOrdenProduccionAnulada
+'                .Show
+'            End With
+    End Select
+End Sub
+
+Private Sub StatusBar1_PanelClick(ByVal Panel As MSComctlLib.Panel)
+
+End Sub

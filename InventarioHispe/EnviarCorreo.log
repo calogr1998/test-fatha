@@ -1,0 +1,3 @@
+Línea 239: la clase mail.sendmail del control sendmail1 no era una clase de control cargada.
+Línea 245: el nombre de la propiedad _ExtentX de sendmail1 no es válido.
+Línea 246: el nombre de la propiedad _ExtentY de sendmail1 no es válido.

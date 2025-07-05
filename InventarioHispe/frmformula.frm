@@ -1,0 +1,975 @@
+VERSION 5.00
+Object = "{D76D7128-4A96-11D3-BD95-D296DC2DD072}#1.0#0"; "Vsflex7.ocx"
+Object = "{0BA686C6-F7D3-101A-993E-0000C0EF6F5E}#1.0#0"; "threed32.ocx"
+Object = "{1BE65FA0-CBF9-11D2-BBC7-00104B9E0792}#2.0#0"; "sstbars2.ocx"
+Begin VB.Form frmformula 
+   BorderStyle     =   1  'Fixed Single
+   Caption         =   "Ingreso de Fórmulas"
+   ClientHeight    =   6780
+   ClientLeft      =   750
+   ClientTop       =   1350
+   ClientWidth     =   10395
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   Moveable        =   0   'False
+   ScaleHeight     =   6780
+   ScaleWidth      =   10395
+   Begin Threed.SSPanel pnldetalle 
+      Height          =   5415
+      Left            =   0
+      TabIndex        =   5
+      Top             =   1170
+      Width           =   10365
+      _Version        =   65536
+      _ExtentX        =   18283
+      _ExtentY        =   9551
+      _StockProps     =   15
+      BackColor       =   -2147483644
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      BorderWidth     =   1
+      BevelInner      =   1
+      Enabled         =   0   'False
+      Begin VB.TextBox TxtTiempo 
+         Height          =   285
+         Left            =   6525
+         TabIndex        =   16
+         Top             =   4320
+         Width           =   825
+      End
+      Begin VB.TextBox txtpbase 
+         Alignment       =   1  'Right Justify
+         Enabled         =   0   'False
+         Height          =   285
+         Left            =   2610
+         TabIndex        =   2
+         Top             =   4320
+         Width           =   555
+      End
+      Begin VB.TextBox txtdias 
+         Height          =   285
+         Left            =   6525
+         TabIndex        =   4
+         Top             =   4770
+         Width           =   825
+      End
+      Begin VSFlex7Ctl.VSFlexGrid fg 
+         Height          =   3705
+         Left            =   630
+         TabIndex        =   1
+         Top             =   315
+         Width           =   9105
+         _cx             =   16060
+         _cy             =   6535
+         _ConvInfo       =   1
+         Appearance      =   2
+         BorderStyle     =   1
+         Enabled         =   -1  'True
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         MousePointer    =   0
+         BackColor       =   -2147483643
+         ForeColor       =   -2147483640
+         BackColorFixed  =   -2147483633
+         ForeColorFixed  =   -2147483630
+         BackColorSel    =   -2147483635
+         ForeColorSel    =   -2147483634
+         BackColorBkg    =   -2147483636
+         BackColorAlternate=   -2147483643
+         GridColor       =   -2147483633
+         GridColorFixed  =   -2147483632
+         TreeColor       =   -2147483632
+         FloodColor      =   192
+         SheetBorder     =   -2147483642
+         FocusRect       =   1
+         HighLight       =   1
+         AllowSelection  =   -1  'True
+         AllowBigSelection=   -1  'True
+         AllowUserResizing=   0
+         SelectionMode   =   0
+         GridLines       =   1
+         GridLinesFixed  =   2
+         GridLineWidth   =   1
+         Rows            =   3
+         Cols            =   3
+         FixedRows       =   1
+         FixedCols       =   1
+         RowHeightMin    =   0
+         RowHeightMax    =   0
+         ColWidthMin     =   0
+         ColWidthMax     =   0
+         ExtendLastCol   =   0   'False
+         FormatString    =   ""
+         ScrollTrack     =   0   'False
+         ScrollBars      =   3
+         ScrollTips      =   0   'False
+         MergeCells      =   0
+         MergeCompare    =   0
+         AutoResize      =   -1  'True
+         AutoSizeMode    =   0
+         AutoSearch      =   0
+         AutoSearchDelay =   2
+         MultiTotals     =   -1  'True
+         SubtotalPosition=   1
+         OutlineBar      =   0
+         OutlineCol      =   0
+         Ellipsis        =   0
+         ExplorerBar     =   0
+         PicturesOver    =   0   'False
+         FillStyle       =   0
+         RightToLeft     =   0   'False
+         PictureType     =   0
+         TabBehavior     =   0
+         OwnerDraw       =   0
+         Editable        =   1
+         ShowComboButton =   -1  'True
+         WordWrap        =   0   'False
+         TextStyle       =   0
+         TextStyleFixed  =   0
+         OleDragMode     =   0
+         OleDropMode     =   0
+         DataMode        =   0
+         VirtualData     =   -1  'True
+         DataMember      =   ""
+         ComboSearch     =   3
+         AutoSizeMouse   =   -1  'True
+         FrozenRows      =   0
+         FrozenCols      =   0
+         AllowUserFreezing=   0
+         BackColorFrozen =   0
+         ForeColorFrozen =   0
+         WallPaper       =   "frmformula.frx":0000
+         WallPaperAlignment=   9
+      End
+      Begin Threed.SSCheck SSCheck1 
+         Height          =   195
+         Left            =   9945
+         TabIndex        =   11
+         Top             =   450
+         Visible         =   0   'False
+         Width           =   195
+         _Version        =   65536
+         _ExtentX        =   344
+         _ExtentY        =   344
+         _StockProps     =   78
+         Caption         =   "SSCheck1"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Value           =   -1  'True
+      End
+      Begin VB.Shape Shape1 
+         BackColor       =   &H00000000&
+         BackStyle       =   1  'Opaque
+         Height          =   3615
+         Left            =   765
+         Top             =   495
+         Width           =   9060
+      End
+      Begin VB.Label Label6 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "Cantidad de receta base:"
+         Height          =   195
+         Left            =   720
+         TabIndex        =   14
+         Top             =   4320
+         Width           =   1785
+      End
+      Begin VB.Label Label5 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "No. de Días de Expiración:"
+         Height          =   195
+         Left            =   4455
+         TabIndex        =   13
+         Top             =   4725
+         Width           =   1920
+      End
+      Begin VB.Label Label4 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "Minutos de Preparaciòn:"
+         Height          =   195
+         Left            =   4455
+         TabIndex        =   12
+         Top             =   4320
+         Width           =   1725
+      End
+   End
+   Begin Threed.SSPanel SSPanel1 
+      Height          =   1140
+      Left            =   0
+      TabIndex        =   3
+      Top             =   0
+      Width           =   10365
+      _Version        =   65536
+      _ExtentX        =   18283
+      _ExtentY        =   2011
+      _StockProps     =   15
+      BackColor       =   -2147483644
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      BorderWidth     =   1
+      BevelInner      =   1
+      Begin VB.TextBox txtgrupo 
+         BackColor       =   &H00FFFFFF&
+         Enabled         =   0   'False
+         Height          =   285
+         Left            =   2250
+         TabIndex        =   10
+         Top             =   585
+         Width           =   330
+      End
+      Begin VB.TextBox txtnomproducto 
+         BackColor       =   &H00FFFFFF&
+         Enabled         =   0   'False
+         Height          =   285
+         Left            =   3555
+         TabIndex        =   9
+         Top             =   585
+         Width           =   5775
+      End
+      Begin VB.TextBox txtcodproducto 
+         Height          =   285
+         Left            =   2610
+         TabIndex        =   0
+         Top             =   585
+         Width           =   870
+      End
+      Begin VB.TextBox txtcodformula 
+         BackColor       =   &H00E0E0E0&
+         Enabled         =   0   'False
+         Height          =   285
+         Left            =   9225
+         TabIndex        =   7
+         Top             =   1170
+         Visible         =   0   'False
+         Width           =   1140
+      End
+      Begin VB.Label lblproducto 
+         Alignment       =   2  'Center
+         Caption         =   "Label3"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   2700
+         TabIndex        =   15
+         Top             =   90
+         Width           =   5235
+      End
+      Begin VB.Label Label2 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "Producto:"
+         Height          =   195
+         Left            =   900
+         TabIndex        =   8
+         Top             =   585
+         Width           =   690
+      End
+      Begin VB.Label Label1 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "Código Formula:"
+         Height          =   195
+         Left            =   9045
+         TabIndex        =   6
+         Top             =   1305
+         Visible         =   0   'False
+         Width           =   1140
+      End
+   End
+   Begin ActiveToolBars.SSActiveToolBars SSActiveToolBars1 
+      Left            =   45
+      Top             =   6390
+      _ExtentX        =   741
+      _ExtentY        =   741
+      _Version        =   131082
+      ToolBarsCount   =   1
+      ToolsCount      =   6
+      Tools           =   "frmformula.frx":688E
+      ToolBars        =   "frmformula.frx":B466
+   End
+   Begin VB.Image Image3 
+      Height          =   195
+      Left            =   8595
+      Top             =   7200
+      Visible         =   0   'False
+      Width           =   375
+   End
+   Begin VB.Image Image2 
+      Height          =   5745
+      Left            =   450
+      Picture         =   "frmformula.frx":B548
+      Top             =   6795
+      Visible         =   0   'False
+      Width           =   5610
+   End
+   Begin VB.Image Image1 
+      Height          =   255
+      Left            =   135
+      Picture         =   "frmformula.frx":11DC6
+      Stretch         =   -1  'True
+      Top             =   6795
+      Visible         =   0   'False
+      Width           =   255
+   End
+   Begin VB.Menu mnu 
+      Caption         =   "menu"
+      Visible         =   0   'False
+      Begin VB.Menu mnu1 
+         Caption         =   "Adicionar"
+         Index           =   0
+      End
+      Begin VB.Menu mnu1 
+         Caption         =   "Eliminar"
+         Index           =   1
+      End
+   End
+End
+Attribute VB_Name = "frmformula"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Dim MEDIDAS As String
+Dim SW_GRABA As Boolean
+Dim sw_controla As Boolean
+
+Private Sub GrabaProceso()
+Dim xfil                As Integer
+ReDim amovs_cab(0 To 8) As a_grabacion
+ReDim amovs_det1(0 To 8) As a_grabacion
+Dim ArrNuevo()      As Variant
+Dim ctipo           As String * 1
+Dim values_temp()   As Variant
+Dim cvalores1       As String
+Dim CadModifica     As String
+Dim X As Integer, Y As Integer, nfil As Integer
+Dim rsformula As New ADODB.Recordset
+    '-------------------------------------------------------
+    '------------------------- ASIGNA DATOS DE LA CABECERA
+    Rem EMB SQL = "SELECT * FROM IF4FORMULA WHERE F4GRUPO ='" & Trim(txtgrupo.Text) & "' and f4codpro = '" & Trim(txtcodproducto.Text) & "'"
+    SQL = "SELECT * FROM IF4FORMULA WHERE f4codpro = '" & Trim(txtcodproducto.Text) & "'"
+    If rsformula.State = 1 Then rsformula.Close
+    rsformula.Open SQL, cnn_dbbancos, adOpenDynamic, adLockOptimistic
+    If rsformula.EOF Then
+        ctipo = "A"
+    Else
+        ctipo = "M"
+    End If
+    rsformula.Close
+    
+    amovs_cab(0).campo = "f4grupo": amovs_cab(0).valor = txtgrupo.Text: amovs_cab(0).TIPO = "T"
+    amovs_cab(1).campo = "f4codpro": amovs_cab(1).valor = txtcodproducto.Text: amovs_cab(1).TIPO = "T"
+    amovs_cab(2).campo = "f4precio": amovs_cab(2).valor = 0#: amovs_cab(2).TIPO = "N"
+    amovs_cab(3).campo = "f4cantidad": amovs_cab(3).valor = 0#: amovs_cab(3).TIPO = "N"
+    amovs_cab(4).campo = "f4fbase": amovs_cab(4).valor = txtpbase.Text: amovs_cab(4).TIPO = "N"
+    amovs_cab(5).campo = "F4UFBASE": amovs_cab(5).valor = 1: amovs_cab(5).TIPO = "N"
+    amovs_cab(6).campo = "F4TIEMPOPREP": amovs_cab(6).valor = TxtTiempo.Text: amovs_cab(6).TIPO = "N"
+    amovs_cab(7).campo = "F4DIAEXPIR": amovs_cab(7).valor = "" & txtdias.Text: amovs_cab(7).TIPO = "N"
+    amovs_cab(8).campo = "f4NOMPRO": amovs_cab(8).valor = txtnomproducto.Text: amovs_cab(8).TIPO = "T"
+    '-------------------------------------------------------
+    '------------------------- ASIGNA DATOS DEL DETALLE
+    
+    amovs_det1(0).campo = "F3GRUPO": amovs_det1(0).valor = "": amovs_det1(0).TIPO = "T"
+    amovs_det1(1).campo = "F3CODPRO": amovs_det1(1).valor = "": amovs_det1(1).TIPO = "T"
+    amovs_det1(2).campo = "F3ITEM": amovs_det1(2).valor = "": amovs_det1(2).TIPO = "N"
+    amovs_det1(3).campo = "F3GRUPOINS": amovs_det1(3).valor = "": amovs_det1(3).TIPO = "T"
+    amovs_det1(4).campo = "F3CODPROINS": amovs_det1(4).valor = "": amovs_det1(4).TIPO = "T"
+    amovs_det1(5).campo = "F3CANTIDAD": amovs_det1(5).valor = "": amovs_det1(5).TIPO = "N"
+    amovs_det1(6).campo = "F3UNIDAD": amovs_det1(5).valor = "": amovs_det1(6).TIPO = "T"
+    amovs_det1(7).campo = "F3CANTIDADT": amovs_det1(7).valor = "": amovs_det1(7).TIPO = "N"
+    amovs_det1(8).campo = "F3NOMPRO": amovs_det1(8).valor = "" & txtnomproducto.Text: amovs_det1(8).TIPO = "T"
+    cvalores1 = "111111111"
+    
+    '-------------------------------------------------------
+    '**** llenando el nuevo arreglo ****'
+    ReDim ArrNuevo(8, fg.Rows - 2)
+    xfil = 0
+    For X = 0 To fg.Rows - 3
+            ArrNuevo(0, xfil) = txtgrupo.Text
+            ArrNuevo(1, xfil) = txtcodproducto.Text
+            ArrNuevo(2, xfil) = fg.TextMatrix(X + 2, 0)
+            ArrNuevo(3, xfil) = fg.TextMatrix(X + 2, 1)
+            ArrNuevo(4, xfil) = fg.TextMatrix(X + 2, 2)
+            'ArrNuevo(5, xfil) = Format(Val(fg.ValueMatrix(X + 2, 5)) / Val(txtpbase), "###,###,##0.00000000")
+            ArrNuevo(5, xfil) = Val(fg.ValueMatrix(X + 2, 5) & "")
+            ArrNuevo(6, xfil) = fg.TextMatrix(X + 2, 4)
+            ArrNuevo(7, xfil) = Val(fg.ValueMatrix(X + 2, 5) & "") * Val(txtpbase & "")  'Val(fg.ValueMatrix(X + 2, 5))
+            ArrNuevo(8, xfil) = fg.TextMatrix(X + 2, 3)
+            xfil = xfil + 1
+    Next
+
+    If ctipo = "A" Then     '--- Nuevo
+        '------- GRABA CABECERA
+        GRABA_REGISTRO amovs_cab(), "IF4FORMULA", ctipo, 8, cnn_dbbancos, ""
+        
+        If sw_graba_registro = True Then
+            '------- GRABA DETALLE
+            GRABA_REGISTRO_DET amovs_det1(), "IF3FORMULA", ctipo, 8, cnn_dbbancos, "", ArrNuevo(), fg.Rows - 3, cvalores1, "", ""
+        End If
+        
+    Else    '--- Modificación
+        
+        '-------------------------------------------------------
+        '------- GRABA CABECERA
+        GRABA_REGISTRO amovs_cab(), "IF4FORMULA", ctipo, 8, cnn_dbbancos, "F4GRUPO = '" & txtgrupo.Text & "' AND F4CODPRO ='" & txtcodproducto.Text & "'"
+        '-------------------------------------------------------
+        '------- GRABA DETALLE
+        cnn_dbbancos.Execute ("DELETE  FROM IF3FORMULA WHERE F3GRUPO = '" & txtgrupo.Text & "' AND F3CODPRO = '" & txtcodproducto & "'")
+        GRABA_REGISTRO_DET amovs_det1(), "IF3FORMULA", "A", 8, cnn_dbbancos, "", ArrNuevo(), fg.Rows - 3, cvalores1, "", ""
+   End If
+    '-------------------------------------------------------
+    '-------------------------------------------------------
+End Sub
+Sub eliminar()
+   Dim rsformula As New ADODB.Recordset
+   SQL = "select  * from IF4FORMULA where F4GRUPO= '" & txtgrupo.Text & "' and F4CODPRO ='" & txtcodproducto.Text & "' and F4NOMPRO = '" & txtnomproducto.Text & "' "
+   rsformula.Open SQL, cnn_dbbancos, adOpenDynamic
+   If Not rsformula.EOF Then
+        SQL = "delete * from IF4FORMULA where F4GRUPO= '" & txtgrupo.Text & "' and F4CODPRO ='" & txtcodproducto.Text & "' and F4NOMPRO = '" & txtnomproducto.Text & "'"
+        cnn_dbbancos.Execute SQL
+    
+        SQL = "delete * from IF3FORMULA where F3GRUPO= '" & txtgrupo.Text & "' and F3CODPRO ='" & txtcodproducto.Text & "' and F4NOMPRO = '" & txtnomproducto.Text & "'"
+        cnn_dbbancos.Execute SQL
+        Nuevo
+   Else
+       Nuevo
+   End If
+    rsformula.Close
+End Sub
+Sub genera_item()
+  contador = fg.Rows
+  For X = 2 To fg.Rows - 1
+      fg.TextMatrix(X, 0) = X - 1
+  Next
+End Sub
+Sub Nuevo()
+  txtgrupo.Text = ""
+  txtcodformula.Text = ""
+  txtcodproducto.Text = ""
+  txtnomproducto.Text = ""
+  txtpbase.Text = ""
+  TxtTiempo.Text = "0"
+  txtdias.Text = 0
+  fg.Rows = 3: fg.Row = fg.Rows - 1
+  fg.Cell(flexcpText, fg.Row, 0, fg.Row, fg.cols - 1) = ""
+End Sub
+
+Private Sub fg_AfterEdit(ByVal Row As Long, ByVal col As Long)
+If col = 5 Then
+  If fg.Row = fg.Rows - 1 Then
+         If MsgBox("Desea adicionar mas Materia Prima", vbYesNo + vbInformation, "Sistema de Producción") = 6 Then
+            If fg.TextMatrix(fg.Row, 2) <> "" And Val(fg.TextMatrix(fg.Row, 5)) > 0 Then
+                fg.Rows = fg.Rows + 1
+                fg.Row = fg.Rows - 1
+                fg.col = 2
+            End If
+         Else
+            genera_item
+            txtpbase.SetFocus
+         End If
+   End If
+End If
+
+End Sub
+
+Private Sub fg_BeforeEdit(ByVal Row As Long, ByVal col As Long, Cancel As Boolean)
+    'If Col = 2 Then
+    '  fg.ColComboList(Col) = "..."
+    'End If
+    'If Col = 4 Then
+    '  fg.ComboList = MEDIDAS
+    'Else
+    '  fg.ComboList = ""
+    'End If
+    
+    Select Case col
+        Case 1
+            Cancel = True
+        Case 2
+            fg.ColComboList(col) = "..."
+            'Cancel = True
+        Case 3
+            Cancel = True
+        Case 4
+            fg.ComboList = MEDIDAS
+        Case Else
+              fg.ComboList = ""
+    End Select
+    
+End Sub
+
+Private Sub fg_CellButtonClick(ByVal Row As Long, ByVal col As Long)
+    
+    Rem EMB SQL = "select F5GRUPO,F5CODPRO,F5NOMPRO,F7CODMED from IF5PLA  order by F5GRUPO" 'where F5GRUPO='1' order by F5GRUPO asc "
+    
+    Rem EMB frmmatprima.Show 1
+    hlp_productos.Show 1
+    SQL = ""
+    If sw = 1 Then
+        fg.TextMatrix(Row, 1) = Grupo
+        fg.TextMatrix(Row, 2) = codmprima
+        fg.TextMatrix(Row, 3) = nommprima
+        fg.TextMatrix(Row, 4) = uniprima
+        fg.col = 5
+    End If
+    Grupo = "": codmprima = "": nommprima = "": uniprima = ""
+
+End Sub
+
+Private Sub fg_CellChanged(ByVal Row As Long, ByVal col As Long)
+   SW_GRABA = True
+End Sub
+
+Private Sub fg_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+If Button = 2 Then
+  PopupMenu mnu, 2
+End If
+End Sub
+
+Private Sub fg_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    fg.MousePointer = 1
+    If fg.col = 2 Or fg.col = 4 Then
+      fg.MousePointer = 99
+      fg.MouseIcon = Image1.Picture
+     Else
+       fg.MousePointer = 1
+    End If
+End Sub
+
+Private Sub fg_ValidateEdit(ByVal Row As Long, ByVal col As Long, Cancel As Boolean)
+ Dim c$
+        Select Case col
+          Case 5
+                If Val(fg.EditText) <= 0 Then Beep: Cancel = True
+        End Select
+
+End Sub
+
+Private Sub Form_Load()
+    
+    Dim rsmedidas As New ADODB.Recordset
+    
+    Me.Height = 7890
+    Me.Width = 10530
+    Me.Left = 1500
+    Me.Top = 1020
+    formatea_fg
+    MEDIDAS = ""
+'    SQL = "SELECT TABCODIGO FROM TBTABLAS WHERE TABTIPO='06' ORDER BY TABCODIGO"
+'    If RSMEDIDAS.State = 1 Then RSMEDIDAS.Close
+'    RSMEDIDAS.Open SQL, cnn_dbbancos
+'    If Not RSMEDIDAS.EOF Then
+'      Do While Not RSMEDIDAS.EOF
+'        MEDIDAS = MEDIDAS & RSMEDIDAS!TABCODIGO & "|"
+'        RSMEDIDAS.MoveNext
+'      Loop
+'    End If
+'    RSMEDIDAS.Close
+    SQL = "SELECT F7CODMED FROM EF7MEDIDAS "
+    If rsmedidas.State = 1 Then rsmedidas.Close
+    rsmedidas.Open SQL, cnn_dbbancos
+    If Not rsmedidas.EOF Then
+      Do While Not rsmedidas.EOF
+        MEDIDAS = MEDIDAS & rsmedidas!F7CODMED & "|"
+        rsmedidas.MoveNext
+      Loop
+    End If
+    rsmedidas.Close
+    'If RsAlmacenes.State = adStateOpen Then RsAlmacenes.Close
+    'RsAlmacenes.Open "SELECT F2NOMALM FROM EF2ALMACENES WHERE F2CODALM = '" & Format(ggrupo, "00") & "'", cnn_dbbancos, adOpenDynamic, adLockOptimistic
+    'If Not RsAlmacenes.EOF Then
+    '    lblproducto.Caption = ggrupo & " - " & RsAlmacenes.Fields("F2NOMALM")
+    'Else
+    '    lblproducto.Caption = ggrupo
+    'End If
+    'RsAlmacenes.Close
+    If sw_nuevo_doc = False Then
+        Grupo = Format(ListaFormulas.dxDBGrid1.Columns.ColumnByFieldName("F4GRUPO").Value, "0")
+        codmprima = Format(ListaFormulas.dxDBGrid1.Columns.ColumnByFieldName("F4CODPRO").Value, "0")
+        sw_controla = False
+        txtcodproducto.Text = codmprima
+        txtcodproducto_KeyPress 13
+    Else
+        Nuevo
+        sw_controla = True
+        lblproducto.Caption = ""
+    End If
+        
+    SW_GRABA = False
+    
+End Sub
+
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    
+    If UnloadMode = 0 Then
+      Cancel = True
+    End If
+
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    
+    ListaFormulas.dxDBGrid1.Dataset.Active = False
+    ListaFormulas.dxDBGrid1.Dataset.Refresh
+    ListaFormulas.dxDBGrid1.Dataset.Active = True
+
+End Sub
+
+Private Sub mnu1_Click(Index As Integer)
+Select Case Index
+    Case 0:
+           fg.Row = fg.Rows - 1
+           If fg.Row = 1 Then
+               fg.Rows = fg.Rows + 1
+               fg.Row = fg.Rows - 1
+           End If
+           
+           If fg.TextMatrix(fg.Row, 2) <> "" And Val(fg.TextMatrix(fg.Row, 5)) > 0 Then
+            If fg.Row = 1 Then
+               fg.Rows = fg.Rows + 1
+               fg.Row = fg.Rows - 1
+            Else
+               fg.Rows = fg.Rows + 1
+               fg.Row = fg.Rows - 1
+            End If
+            fg.col = 2
+           End If
+    Case 1:
+           'fg.Row = fg.Rows - 1
+           If fg.Row > 1 Then
+              fg.RemoveItem fg.Row
+              genera_item
+           End If
+End Select
+End Sub
+
+
+Private Sub SSActiveToolBars1_ToolClick(ByVal Tool As ActiveToolBars.SSTool)
+On Error GoTo descrip
+Select Case Tool.Id
+  Case "N":
+           If SW_GRABA = True Then
+                If MsgBox("No ha guardado los cambio, desea guardarlos ahora", vbYesNo + vbInformation, "Sistema de Producción") = 6 Then
+                     GrabaProceso
+                End If
+           End If
+           Nuevo
+           sw_controla = True
+           txtcodproducto.SetFocus
+           SW_GRABA = False
+  Case "G":
+            If txtcodproducto.Text = "" Then Exit Sub
+            If txtpbase.Text = "" Or Val(txtpbase) = 0 Then MsgBox "Receta Base no puede ser cero", vbOKOnly + vbInformation, "Sistema de Producción": Exit Sub
+            Me.MousePointer = 11
+             GrabaProceso
+             SW_GRABA = False
+            Me.MousePointer = 1
+  Case "M":
+            frmcformula.Show 1
+            If sw = 1 Then
+                txtgrupo.Text = Grupo
+                txtcodproducto = codmprima
+                fg.Rows = 2
+                sw_controla = False
+                txtcodproducto_KeyPress 13
+            End If
+            Grupo = ""
+            codmprima = ""
+  Case "I":
+            Me.MousePointer = 11
+            Consultar_Recetas
+            Me.MousePointer = 1
+            
+  Case "E":
+            If txtcodproducto.Text = "" Then Exit Sub
+            Me.MousePointer = 11
+             eliminar
+             txtcodproducto.SetFocus
+            Me.MousePointer = 1
+  Case "S":
+           Unload Me
+End Select
+Exit Sub
+
+descrip:
+        MsgBox Err.Description, vbOKOnly + vbCritical, "Sistema de Producción"
+        Resume Next
+
+End Sub
+Sub formatea_fg1()
+    fg.ColWidth(0) = 510
+    fg.ColWidth(1) = 585
+    fg.TextMatrix(0, 1) = "grupo"
+    fg.ColWidth(2) = 800
+    fg.TextMatrix(0, 2) = "Còdigo"
+    fg.ColWidth(3) = 4050
+    fg.TextMatrix(0, 3) = "Descripcion"
+    fg.ColWidth(4) = 930
+    fg.TextMatrix(0, 4) = "U.M."
+    fg.ColWidth(5) = 970
+    fg.TextMatrix(0, 5) = "Cantidad"
+End Sub
+Sub formatea_fg()
+  ' initialize control
+        fg.WordWrap = True
+        fg.cols = 6
+        fg.FixedRows = 2
+        fg.MergeCells = flexMergeFixedOnly
+        ' create row headers
+        fg.MergeRow(0) = True
+        fg.Cell(flexcpText, 0, 1, 0, 5) = "Insumos"
+        fg.Cell(flexcpText, 1, 1, 1) = "Grupo"
+        fg.Cell(flexcpText, 1, 2, 1) = "Codigo"
+        fg.Cell(flexcpText, 1, 3, 1) = "Descripcion"
+        fg.ColWidth(3) = 4000
+        fg.Cell(flexcpText, 1, 4, 1) = "U.Medida"
+        fg.Cell(flexcpText, 1, 5, 1) = "Cantidad"
+        ' create column header
+        fg.MergeCol(0) = True
+        fg.Cell(flexcpText, 0, 0, 1, 0) = "No.Orden" '
+        ' align and autozise the cells
+        fg.Cell(flexcpAlignment, 0, 0, 1, fg.cols - 1) = flexAlignCenterCenter
+        'fg.AutoSize 1, fg.Cols - 1, False, 300
+End Sub
+
+Sub llena_formula(wgrupo As String, wcodprod As String)
+On Error GoTo descrip
+    
+Dim RsFormulaCab As New ADODB.Recordset
+Dim RsFormulaDet As New ADODB.Recordset
+    
+    If rsif5pla.State = 1 Then rsif5pla.Close
+    Rem EMB SQL = "select f5nompro from if5pla where f5grupo ='" & ggrupo & "' and f5codpro ='" & codmprima & "'"
+    SQL = "select f5nompro from if5pla where  f5codpro ='" & codmprima & "'"
+    rsif5pla.Open SQL, cnn_dbbancos, adOpenDynamic
+    If Not rsif5pla.EOF Then
+        txtnomproducto.Text = "" & rsif5pla!F5NOMPRO
+    End If
+    rsif5pla.Close
+    
+    Rem EMB SQL = "select * from if4formula where f4grupo ='" & ggrupo & "' and f4codpro = '" & codmprima & "'"
+    SQL = "select * from if4formula where f4codpro = '" & codmprima & "'"
+    If rsdocumentos.State = adStateOpen Then rsdocumentos.Close
+    rsdocumentos.Open SQL, cnn_dbbancos, adOpenDynamic
+    If Not rsdocumentos.EOF Then
+        txtpbase.Text = "" & rsdocumentos!f4fbase
+        TxtTiempo.Text = "" & rsdocumentos.Fields("F4TIEMPOPREP")
+        txtdias.Text = "" & rsdocumentos!F4DIAEXPIR
+    End If
+    rsdocumentos.Close
+    
+    fg.Rows = 3
+    Rem EMB SQL = "select * from if3formula where f3grupo ='" & ggrupo & "' and f3codpro = '" & codmprima & "' Order by F3item asc"
+    SQL = "select * from if3formula where f3codpro = '" & codmprima & "' Order by F3item asc"
+    If rsdocumentos.State = adStateOpen Then rsdocumentos.Close
+    rsdocumentos.Open SQL, cnn_dbbancos, adOpenDynamic
+    If Not rsdocumentos.EOF Then
+        Row% = 2
+        rsdocumentos.MoveFirst
+        Do While Not rsdocumentos.EOF
+            Rem EMB SQL = "select f5nompro from if5pla where f5grupo ='" & rsdocumentos!f3grupoins & "' and f5codpro ='" & rsdocumentos!f3codproins & "'"
+            SQL = "select f5nompro from if5pla where f5codpro ='" & rsdocumentos!f3codproins & "'"
+            rsif5pla.Open SQL, cnn_dbbancos, adOpenDynamic
+            If Not rsif5pla.EOF Then
+               nombre = rsif5pla!F5NOMPRO
+            End If
+            rsif5pla.Close
+            'Cantidad = Format(rsdocumentos!f3cantidad * Val(txtpbase.Text), "0.00")
+            fg.AddItem rsdocumentos!F3ITEM & vbTab & rsdocumentos!f3grupoins & vbTab & rsdocumentos!f3codproins & vbTab & nombre & vbTab & rsdocumentos!f3unidad & vbTab & rsdocumentos!F3CANTIDAD, Row%
+            Row% = Row% + 1
+            rsdocumentos.MoveNext
+        Loop
+        fg.RemoveItem Row%
+    End If
+    formatea_fg
+    rsdocumentos.Close
+    Exit Sub
+
+descrip:
+        MsgBox Err.Description, vbOKOnly + vbCritical, "Sistema de Producción"
+        Resume Next
+
+End Sub
+
+Private Sub SSCheck1_Click(Value As Integer)
+    
+    If Value = True Then
+        fg.WallPaper = Image2.Picture
+    Else
+        fg.WallPaper = Image3.Picture
+    End If
+  
+End Sub
+
+Private Sub txtcodproducto_Change()
+  SW_GRABA = True
+  If txtcodproducto.Text = "" Then
+     txtpbase.Enabled = False
+     pnldetalle.Enabled = False
+  Else
+    txtpbase.Enabled = True
+    pnldetalle.Enabled = True
+  End If
+End Sub
+
+Private Sub txtcodproducto_DblClick()
+    
+    txtcodproducto_KeyDown vbKeyF2, 0
+
+End Sub
+
+Private Sub txtcodproducto_GotFocus()
+    
+    txtcodproducto.SelStart = 0
+    txtcodproducto.SelLength = Len(txtcodproducto.Text)
+
+End Sub
+
+Private Sub txtcodproducto_KeyDown(KeyCode As Integer, Shift As Integer)
+    
+    If KeyCode = vbKeyF2 Then
+        Rem EMB SQL = "select F5CODPRO,F5NOMPRO,F7CODMED from IF5PLA order by F5NOMPRO asc "
+        Rem EMB SQL = "select F5GRUPO,F5CODPRO,F5NOMPRO,F7CODMED from IF5PLA where F5GRUPO='" & ggrupo & "'  order by F5GRUPO,F5NOMPRO asc "
+        Rem EMB frmmatprima.Show 1
+        hlp_productos.Show 1
+        SQL = ""
+        If Len(codmprima) > 0 Then
+          txtcodproducto.Text = codmprima
+          txtcodproducto_KeyPress 13
+        End If
+        'codmprima = ""
+    End If
+
+End Sub
+
+Private Sub txtcodproducto_KeyPress(KeyAscii As Integer)
+
+    If KeyAscii = 13 Then
+        Dim rsformula As New ADODB.Recordset
+        
+        codmprima = Trim(txtcodproducto.Text)
+        Rem EMB SQL = "select F5GRUPO,F5NOMPRO,F7CODMED from IF5PLA where F5CODPRO='" & codmprima & "' and F5GRUPO='" & ggrupo & "'"
+        SQL = "select F5CODPRO,F5NOMPRO,F7CODMED from IF5PLA where F5CODPRO='" & codmprima & "'"
+        If rsif5pla.State = 1 Then rsif5pla.Close
+        rsif5pla.Open SQL, cnn_dbbancos, adOpenDynamic
+        If Not rsif5pla.EOF Then
+            txtcodproducto.Text = "" & codmprima
+            txtnomproducto.Text = "" & rsif5pla!F5NOMPRO
+            Rem EMB txtgrupo.Text = "" & rsif5pla!F5GRUPO
+            Rem EMB SQL = "select * from if4formula where f4grupo='" & ggrupo & "' and f4codpro='" & codmprima & "'"
+            SQL = "select * from if4formula WHERE f4codpro='" & codmprima & "'"
+            If rsformula.State = 1 Then rsformula.Close
+            rsformula.Open SQL, cnn_dbbancos, adOpenDynamic
+            If Not rsformula.EOF Then
+                If sw_controla = True Then
+                    MsgBox "Ya existe una formula para ese còdigo", vbOKOnly, "Sistema de Producción"
+                End If
+                llena_formula "", codmprima  'ggrupo,codmprima
+                'fg.SetFocus
+            Else
+                 'fg.SetFocus
+            End If
+            rsformula.Close
+        Else
+            'txtcodproducto.SetFocus
+        End If
+    End If
+End Sub
+
+Private Sub txtdias_KeyPress(KeyAscii As Integer)
+ If KeyAscii = 13 Then
+   SSActiveToolBars1.Tools.ITEM("G").Enabled = True
+   '  SSActiveToolBars1.Tools.Item("G").SetFocus
+ End If
+End Sub
+
+Private Sub txtpbase_Change()
+    SW_GRABA = True
+End Sub
+
+Private Sub txtpbase_GotFocus()
+    txtpbase.SelStart = 0
+    txtpbase.SelLength = Len(txtpbase.Text)
+End Sub
+Private Sub txtpbase_KeyPress(KeyAscii As Integer)
+If KeyAscii = 13 Then TxtTiempo.SetFocus
+End Sub
+
+Private Sub txttiempo_GotFocus()
+  TxtTiempo.SelStart = 0
+  TxtTiempo.SelLength = Len(TxtTiempo.Text)
+End Sub
+
+Private Sub txttiempo_KeyPress(KeyAscii As Integer)
+ If KeyAscii = 13 Then txtdias.SetFocus
+End Sub
+
+Private Sub Consultar_Recetas()
+Dim Codigo, producto As String
+Dim Reg As New ADODB.Recordset
+
+
+With Recetas
+    .DataControl1.ConnectionString = cnn_dbbancos
+    SQL = "SELECT DISTINCTROW A.F4GRUPO, A.F4CODPRO, A.f4NOMPRO, A.F4CANTIDAD, A.F4FBASE, A.F4TIEMPOPREP, A.F4DIAEXPIR, B.F3GRUPOINS, B.F3CODPROINS, C.F5NOMPRO, B.F3CANTIDAD, B.F3UNIDAD " & _
+              " FROM (IF3FORMULA AS B INNER JOIN IF4FORMULA AS A ON (B.F3CODPRO = A.F4CODPRO) AND (B.F3GRUPO = A.F4GRUPO)) INNER JOIN IF5PLA AS C ON (B.F3CODPROINS = C.F5CODPRO) AND (B.F3GRUPOINS = C.F5GRUPO) " & _
+              " WHERE (A.F4CODPRO = '" & txtcodproducto.Text & "')    ORDER BY A.F4GRUPO, A.F4CODPRO ;"
+
+    .DataControl1.Source = SQL
+    
+    If Reg.State = adStateOpen Then Reg.Close
+    Reg.Open "SELECT * FROM SF1PARAM WHERE F1CODEMP = '" & wempresa & "'", cnn_control, adOpenKeyset, adLockOptimistic
+    If Not Reg.EOF Then
+       .fldempresa.Text = Reg.Fields("F1NOMEMP")
+       Reg.Close
+    Else
+       .fldempresa.Text = wempresa
+       Reg.Close
+    End If
+    .fldfecha.Text = Format(Now, "dd/mm/yyyy")
+    .Show vbModal
+
+End With
+
+End Sub
+
+

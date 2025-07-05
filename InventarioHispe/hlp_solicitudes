@@ -1,0 +1,128 @@
+VERSION 5.00
+Object = "{6A24B331-7634-11D3-A5B0-0050044A7E1A}#1.5#0"; "DXDBGRID.DLL"
+Begin VB.Form hlp_solicitudes 
+   BorderStyle     =   1  'Fixed Single
+   Caption         =   "Solicitudes"
+   ClientHeight    =   6105
+   ClientLeft      =   2055
+   ClientTop       =   3255
+   ClientWidth     =   10470
+   BeginProperty Font 
+      Name            =   "Arial"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   6105
+   ScaleWidth      =   10470
+   Begin DXDBGRIDLibCtl.dxDBGrid dxDBGrid2 
+      Height          =   2040
+      Left            =   90
+      OleObjectBlob   =   "hlp_solicitudes.frx":0000
+      TabIndex        =   1
+      Top             =   3870
+      Width           =   10275
+   End
+   Begin DXDBGRIDLibCtl.dxDBGrid dxDBGrid1 
+      Height          =   3660
+      Left            =   90
+      OleObjectBlob   =   "hlp_solicitudes.frx":321D
+      TabIndex        =   0
+      Top             =   45
+      Width           =   10275
+   End
+   Begin VB.Menu mnupri 
+      Caption         =   ""
+      Begin VB.Menu mnufiltro 
+         Caption         =   "Filtrar"
+      End
+      Begin VB.Menu mnufiltroavanz 
+         Caption         =   "Filtro Avanzado:"
+      End
+      Begin VB.Menu mnuordasc 
+         Caption         =   "Ord. Asc."
+      End
+      Begin VB.Menu mnuorddesc 
+         Caption         =   "Ord. Desc."
+      End
+      Begin VB.Menu mnutodos 
+         Caption         =   "Mostrar Todos"
+      End
+   End
+End
+Attribute VB_Name = "hlp_solicitudes"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Dim SQL     As String
+Dim rs      As New ADODB.Recordset
+
+Private Sub dxDBGrid1_OnChangeNodeEx()
+    Dim valor As String
+    valor = dxDBGrid1.Columns.ColumnByFieldName("cod_solicitud").Value
+    proceso2 (valor)
+End Sub
+
+'Private Sub Form_Activate()
+'
+'    DBG1.HighlightRowStyle.BackColor = vbActiveTitleBar
+'    DBG1.HighlightRowStyle.ForeColor = vbWhite
+'    DBG1.AlternatingRowStyle = True
+'    Screen.MousePointer = vbDefault
+'End Sub
+
+Private Sub Form_Load()
+    
+    Me.AutoRedraw = False
+    Me.Left = 1600
+    Me.Top = 1050
+    
+    sw_nuevo_documento = True
+    Me.AutoRedraw = True
+    proceso
+    proceso2 (dxDBGrid1.Columns.ColumnByFieldName("cod_solicitud").Value)
+    dxDBGrid1.Options.Unset (egoShowGroupPanel)
+    dxDBGrid1.Filter.FilterActive = False
+    
+End Sub
+
+Private Sub proceso()
+'    SQL = "SELECT tb_cabsolicitud.cod_solicitud, tb_cabsolicitud.cs_fecha, tb_cabsolicitud.cs_codsolicitante, tb_cabsolicitud.cs_moneda, tb_cabsolicitud.cs_total, EF2PROVEEDORES.F2NEWRUC, EF2PROVEEDORES.F2NOMPROV " _
+    & "FROM tb_cabsolicitud LEFT JOIN EF2PROVEEDORES ON tb_cabsolicitud.CS_PROVEEDOR = EF2PROVEEDORES.F2NEWRUC " _
+    & "WHERE (((tb_cabsolicitud.cod_solicitud) In (SELECT DISTINCTROW tb_cabsolicitud.cod_solicitud FROM tb_cabsolicitud INNER JOIN tb_detsolicitud ON tb_cabsolicitud.cod_solicitud = tb_detsolicitud.cod_solicitud GROUP BY tb_cabsolicitud.cod_solicitud " _
+    & "HAVING (((Sum(tb_detsolicitud.candis))>0))))) " _
+    & "ORDER BY tb_cabsolicitud.cod_solicitud DESC;"
+    
+    SQL = "SELECT tb_cabsolicitud.cod_solicitud, tb_cabsolicitud.cs_fecha, tb_cabsolicitud.cs_codsolicitante, tb_cabsolicitud.cs_moneda, tb_cabsolicitud.cs_total, EF2PROVEEDORES.F2NEWRUC, EF2PROVEEDORES.F2NOMPROV " _
+    & "FROM tb_cabsolicitud LEFT JOIN EF2PROVEEDORES ON tb_cabsolicitud.CS_PROVEEDOR = EF2PROVEEDORES.F2NEWRUC " _
+    & "WHERE (((tb_cabsolicitud.cod_solicitud) In (SELECT DISTINCTROW tb_cabsolicitud.cod_solicitud FROM tb_cabsolicitud INNER JOIN tb_detsolicitud ON tb_cabsolicitud.cod_solicitud = tb_detsolicitud.cod_solicitud GROUP BY tb_cabsolicitud.cod_solicitud))) " _
+    & "ORDER BY tb_cabsolicitud.cod_solicitud DESC;"
+    
+    With dxDBGrid1
+        .Dataset.ADODataset.ConnectionString = cnn_dbbancos
+        .Dataset.Active = False
+        .Dataset.ADODataset.CommandText = SQL
+        .Dataset.Active = True
+        .KeyField = "cod_solicitud"
+    End With
+
+End Sub
+Private Sub proceso2(ByVal codigo As String)
+    With dxDBGrid2
+        .Dataset.ADODataset.ConnectionString = cnn_dbbancos
+        SQL = "SELECT COD_SOLICITUD,ITEM,COD_PRODUCTO,DS_DESCRIPCION,DS_UNIDMED,DS_CANTIDAD,PRECIO,PRESUG,CS_FENTREGA FROM TB_DETSOLICITUD WHERE COD_SOLICITUD= '" & codigo & "' ORDER BY COD_SOLICITUD,ITEM"
+        .Dataset.Active = False
+        .Dataset.ADODataset.CommandText = SQL
+        .Dataset.Active = True
+        .KeyField = "item"
+    End With
+
+End Sub

@@ -1,0 +1,155 @@
+VERSION 5.00
+Object = "{6A24B331-7634-11D3-A5B0-0050044A7E1A}#1.5#0"; "DXDBGRID.DLL"
+Begin VB.Form ayuda_almacen 
+   Caption         =   "Ayuda de Almacenes"
+   ClientHeight    =   4005
+   ClientLeft      =   1095
+   ClientTop       =   1185
+   ClientWidth     =   4935
+   BeginProperty Font 
+      Name            =   "Arial"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
+   LinkTopic       =   "Form1"
+   ScaleHeight     =   4005
+   ScaleWidth      =   4935
+   Begin VB.Frame Frame1 
+      Height          =   870
+      Left            =   45
+      TabIndex        =   1
+      Top             =   45
+      Width           =   4770
+      Begin VB.TextBox txtbusqueda 
+         Height          =   315
+         Left            =   1215
+         TabIndex        =   3
+         Top             =   360
+         Width           =   2880
+      End
+      Begin VB.Label Label1 
+         AutoSize        =   -1  'True
+         Caption         =   "Búsqueda"
+         Height          =   210
+         Left            =   315
+         TabIndex        =   2
+         Top             =   405
+         Width           =   735
+      End
+   End
+   Begin DXDBGRIDLibCtl.dxDBGrid dxDBGrid1 
+      Height          =   2895
+      Left            =   45
+      OleObjectBlob   =   "ayuda_almacen.frx":0000
+      TabIndex        =   0
+      Top             =   990
+      Width           =   4770
+   End
+End
+Attribute VB_Name = "ayuda_almacen"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Dim cnn_mov     As New ADODB.Connection
+Dim csql        As String
+
+Private Sub CABECERA()
+
+    With dxDBGrid1
+        .Columns(0).Caption = "Codigo": .Columns(0).Width = 45: .Columns(0).DisableEditor = True
+        .Columns(1).Caption = "Descripcion.": .Columns(1).Width = 70: .Columns(1).DisableEditor = True
+    End With
+    
+End Sub
+
+Private Sub dxDBGrid1_OnDblClick()
+    wcod_alm = dxDBGrid1.Columns(0).Value
+    wnomalmacen = dxDBGrid1.Columns(1).Value
+    
+    Me.Hide
+End Sub
+
+Private Sub dxDBGrid1_OnEdited(ByVal Node As DXDBGRIDLibCtl.IdxGridNode)
+
+    With dxDBGrid1.Dataset
+        If dxDBGrid1.Columns.FocusedColumn.ColumnType = gedLookupEdit Then
+            If .State = dsEdit Then
+                dxDBGrid1.M.HideEditor
+                .Post
+                .DisableControls
+                .Close
+                .Open
+                .EnableControls
+            End If
+        End If
+    End With
+
+End Sub
+
+Private Sub FILL()
+
+    csql = "SELECT F2CODALM, F2NOMALM FROM EF2ALMACENES ORDER BY F2CODALM"
+    
+    dxDBGrid1.Dataset.Active = False
+    dxDBGrid1.Dataset.ADODataset.CommandText = csql
+    dxDBGrid1.Dataset.Active = True
+    dxDBGrid1.KeyField = "F2CODALM"
+    CABECERA
+
+    dxDBGrid1.Columns(0).Color = &HC0FFFF
+    dxDBGrid1.Columns(1).Color = &HC0FFFF
+       
+End Sub
+
+Private Sub Form_Load()
+    If cnn_mov.State = adStateOpen Then cnn_mov.Close
+    cnn_mov.ConnectionString = cnn_dbbancos
+    cnn_mov.Open cconexion
+            
+    With dxDBGrid1
+        .DefaultFields = True
+        .Dataset.ADODataset.ConnectionString = cnn_mov
+    End With
+    FILL
+                
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+
+    dxDBGrid1.Dataset.Close
+    cnn_mov.Close
+
+End Sub
+
+Private Sub txtbusqueda_Change()
+
+    dxDBGrid1.Dataset.Filtered = True
+    dxDBGrid1.Dataset.Filter = "F2CODALM LIKE '*" & txtbusqueda.Text & "*' OR " & " F2NOMALM LIKE '*" & txtbusqueda.Text & "*' "
+    
+    If Len(Trim(txtbusqueda.Text)) = 0 Then
+            dxDBGrid1.Dataset.Filtered = False
+    End If
+    
+End Sub
+
+Private Sub txtbusqueda_KeyPress(KeyAscii As Integer)
+
+    If KeyAscii = 13 Then
+        If Len(Trim(txtbusqueda.Text)) > 0 Then
+            dxDBGrid1.Dataset.Filtered = True
+            dxDBGrid1.Dataset.Filter = "F2CODALM LIKE '*" & txtbusqueda.Text & "*' OR " & " F2NOMALM LIKE '*" & txtbusqueda.Text & "*' "
+        Else
+            dxDBGrid1.Dataset.Filtered = False
+        End If
+    End If
+    
+End Sub
+
+
+
+

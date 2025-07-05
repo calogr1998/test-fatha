@@ -1,0 +1,16 @@
+VERSION 5.00
+Begin {9EB8768B-CDFA-44DF-8F3E-857A8405E1DB} REPORTE 
+   Caption         =   "Proyecto1 - REPORTE (ActiveReport)"
+   ClientHeight    =   9615
+   ClientLeft      =   540
+   ClientTop       =   645
+   ClientWidth     =   13830
+   _ExtentX        =   24395
+   _ExtentY        =   16960
+   SectionData     =   "REPORTE.dsx":0000
+End
+Attribute VB_Name = "REPORTE"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False

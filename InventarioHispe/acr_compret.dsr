@@ -1,0 +1,70 @@
+VERSION 5.00
+Begin {9EB8768B-CDFA-44DF-8F3E-857A8405E1DB} acr_compret 
+   Caption         =   "Proyecto1 - acr_compret (ActiveReport)"
+   ClientHeight    =   9165
+   ClientLeft      =   0
+   ClientTop       =   285
+   ClientWidth     =   14550
+   _ExtentX        =   25665
+   _ExtentY        =   16166
+   SectionData     =   "acr_compret.dsx":0000
+End
+Attribute VB_Name = "acr_compret"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Dim bancos      As ADODB.Connection
+Dim record      As ADODB.Recordset
+Dim nretenido   As Double
+Dim nbase       As Double
+
+Private Sub ActiveReport_Initialize()
+
+    nbase = 0#: nretenido = 0#
+    Set bancos = New ADODB.Connection
+    Set record = New ADODB.Recordset
+    
+    With bancos
+        .Provider = "Microsoft.JET.OLEDB.4.0; Data Source=" & wrutabancos & "\DB_BANCOS.MDB; Persist Security Info=False"
+        .Open
+    End With
+    
+End Sub
+
+Private Sub ActiveReport_Terminate()
+
+    bancos.Close
+    
+End Sub
+
+Private Sub Detail_Format()
+        
+    If fldanulado.Text = "S" Then
+        Field5.Text = "0.00"
+        Field6.Text = "0.00"
+        Field3.Text = ""
+        Field4.Text = "A N U L A D O"
+    End If
+    
+    SQL = "Select * from CAMBIOS where CVDATE(fecha)=CVDate('" & Field10.Text & "')"
+    If record.State = adStateOpen Then record.Close
+    record.Open SQL, bancos, adOpenDynamic, adLockOptimistic
+    If Not record.EOF Then
+        Field7.Text = Format(record.Fields("CAMBIO"), "0.000")
+    Else
+        Field7.Text = "0.000"
+    End If
+    record.Close
+
+    nbase = nbase + Val(Format(Field5.Text, "0.00"))
+    nretenido = nretenido + Val(Format(Field6.Text, "0.00"))
+
+End Sub
+
+Private Sub GroupFooter1_Format()
+
+    fldretenido.Text = Format(nretenido, "###,###,##0.00")
+    fldbase.Text = Format(nbase, "###,###,##0.00")
+
+End Sub
